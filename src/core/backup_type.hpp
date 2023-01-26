@@ -144,4 +144,41 @@ private:
 	const int line;
 };
 
+/**
+ * Class to backup a specific variable and restore it upon destruction of this object.
+ * Contrary to #Backup this restores the variable automatically.
+ */
+template <typename T>
+struct AutoRestoreBackup {
+	/**
+	 * Backup variable.
+	 * @param original Variable to backup.
+	 */
+	AutoRestoreBackup(T &original, const char * const file, const int line) : original(original), original_value(original) {}
+
+	/**
+	 * Backup variable and switch to new value.
+	 * @param original Variable to backup.
+	 * @param new_value New value for variable.
+	 */
+	template <typename U>
+	AutoRestoreBackup(T &original, const U &new_value) : original(original), original_value(original)
+	{
+		/* Note: We use a separate typename U, so type conversions are handled by assignment operator. */
+		original = new_value;
+	}
+
+	/**
+	 * Restore the variable upon object destruction.
+	 */
+	~AutoRestoreBackup()
+	{
+		this->original = this->original_value;
+	}
+
+private:
+	T &original;
+	T original_value;
+};
+
 #endif /* BACKUP_TYPE_HPP */
