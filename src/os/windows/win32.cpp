@@ -523,7 +523,7 @@ char *convert_from_fs(const wchar_t *name, char *utf8_buf, size_t buflen)
 wchar_t *convert_to_fs(const std::string_view name, wchar_t *system_buf, size_t buflen)
 {
 	int len = MultiByteToWideChar(CP_UTF8, 0, name.data(), (int)name.size(), system_buf, (int)buflen);
-	if (len == 0) system_buf[0] = '\0';
+	system_buf[len] = '\0';
 
 	return system_buf;
 }
