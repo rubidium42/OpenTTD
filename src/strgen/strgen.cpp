@@ -34,41 +34,41 @@
 
 
 #ifdef _MSC_VER
-# define LINE_NUM_FMT(s) "%s (%d): warning: %s (" s ")\n"
+# define LINE_NUM_FMT(s) "{} ({}): warning: {} (" s ")\n"
 #else
-# define LINE_NUM_FMT(s) "%s:%d: " s ": %s\n"
+# define LINE_NUM_FMT(s) "{}:{}: " s ": {}\n"
 #endif
 
 void StrgenWarningI(const std::string &msg)
 {
 	if (_show_todo > 0) {
-		fprintf(stderr, LINE_NUM_FMT("warning"), _file, _cur_line, msg.c_str());
+		fmt::print(stderr, LINE_NUM_FMT("warning"), _file, _cur_line, msg);
 	} else {
-		fprintf(stderr, LINE_NUM_FMT("info"), _file, _cur_line, msg.c_str());
+		fmt::print(stderr, LINE_NUM_FMT("info"), _file, _cur_line, msg);
 	}
 	_warnings++;
 }
 
 void StrgenErrorI(const std::string &msg)
 {
-	fprintf(stderr, LINE_NUM_FMT("error"), _file, _cur_line, msg.c_str());
+	fmt::print(stderr, LINE_NUM_FMT("error"), _file, _cur_line, msg);
 	_errors++;
 }
 
 void NORETURN StrgenFatalI(const std::string &msg)
 {
-	fprintf(stderr, LINE_NUM_FMT("FATAL"), _file, _cur_line, msg.c_str());
+	fmt::print(stderr, LINE_NUM_FMT("FATAL"), _file, _cur_line, msg);
 #ifdef _MSC_VER
-	fprintf(stderr, LINE_NUM_FMT("warning"), _file, _cur_line, "language is not compiled");
+	fmt::print(stderr, LINE_NUM_FMT("warning"), _file, _cur_line, "language is not compiled");
 #endif
 	throw std::exception();
 }
 
 void NORETURN FatalErrorI(const std::string &msg)
 {
-	fprintf(stderr, LINE_NUM_FMT("FATAL"), _file, _cur_line, msg.c_str());
+	fmt::print(stderr, LINE_NUM_FMT("FATAL"), _file, _cur_line, msg);
 #ifdef _MSC_VER
-	fprintf(stderr, LINE_NUM_FMT("warning"), _file, _cur_line, "language is not compiled");
+	fmt::print(stderr, LINE_NUM_FMT("warning"), _file, _cur_line, "language is not compiled");
 #endif
 	exit(2);
 }
@@ -423,11 +423,11 @@ int CDECL main(int argc, char *argv[])
 
 		switch (i) {
 			case 'v':
-				puts("$Revision$");
+				fmt::print("$Revision$");
 				return 0;
 
 			case 'C':
-				printf("args\tflags\tcommand\treplacement\n");
+				fmt::print("args\tflags\tcommand\treplacement\n");
 				for (const CmdStruct *cs = _cmd_structs; cs < endof(_cmd_structs); cs++) {
 					char flags;
 					if (cs->proc == EmitGender) {
@@ -439,21 +439,21 @@ int CDECL main(int argc, char *argv[])
 					} else {
 						flags = '0'; // Command needs no parameters
 					}
-					printf("%i\t%c\t\"%s\"\t\"%s\"\n", cs->consumes, flags, cs->cmd, strstr(cs->cmd, "STRING") ? "STRING" : cs->cmd);
+					fmt::print("{}\t{:c}\t\"{}\"\t\"{}\"\n", cs->consumes, flags, cs->cmd, strstr(cs->cmd, "STRING") ? "STRING" : cs->cmd);
 				}
 				return 0;
 
 			case 'L':
-				printf("count\tdescription\tnames\n");
+				fmt::print("count\tdescription\tnames\n");
 				for (const PluralForm *pf = _plural_forms; pf < endof(_plural_forms); pf++) {
-					printf("%i\t\"%s\"\t%s\n", pf->plural_count, pf->description, pf->names);
+					fmt::print("{}\t\"{}\"\t{}\n", pf->plural_count, pf->description, pf->names);
 				}
 				return 0;
 
 			case 'P':
-				printf("name\tflags\tdefault\tdescription\n");
+				fmt::print("name\tflags\tdefault\tdescription\n");
 				for (size_t j = 0; j < lengthof(_pragmas); j++) {
-					printf("\"%s\"\t%s\t\"%s\"\t\"%s\"\n",
+					fmt::print("\"{}\"\t{}\t\"{}\"\t\"{}\"\n",
 							_pragmas[j][0], _pragmas[j][1], _pragmas[j][2], _pragmas[j][3]);
 				}
 				return 0;
@@ -467,7 +467,7 @@ int CDECL main(int argc, char *argv[])
 				break;
 
 			case 'h':
-				puts(
+				fmt::print(
 					"strgen - $Revision$\n"
 					" -v | --version    print version information and exit\n"
 					" -t | --todo       replace any untranslated strings with '<TODO>'\n"
@@ -493,7 +493,7 @@ int CDECL main(int argc, char *argv[])
 				break;
 
 			case -2:
-				fprintf(stderr, "Invalid arguments\n");
+				fmt::print(stderr, "Invalid arguments\n");
 				return 0;
 		}
 	}
@@ -556,7 +556,7 @@ int CDECL main(int argc, char *argv[])
 
 				/* if showing warnings, print a summary of the language */
 				if ((_show_todo & 2) != 0) {
-					fprintf(stdout, "%d warnings and %d errors for %s\n", _warnings, _errors, pathbuf);
+					fmt::print("{} warnings and {} errors for {}\n", _warnings, _errors, pathbuf);
 				}
 			}
 		}
