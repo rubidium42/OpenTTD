@@ -235,7 +235,7 @@ struct HeaderFileWriter : HeaderWriter, FileWriter {
 		output_stream << "#define TABLE_STRINGS_H\n";
 	}
 
-	void WriteStringID(const char *name, int stringid)
+	void WriteStringID(const std::string &name, int stringid)
 	{
 		if (prev + 1 != stringid) output_stream << "\n";
 		output_stream << fmt::format("static const StringID {} = 0x{:X};\n", name, stringid);

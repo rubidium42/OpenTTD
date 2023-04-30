@@ -161,7 +161,7 @@ struct StringNameWriter : HeaderWriter {
 	{
 	}
 
-	void WriteStringID(const char *name, int stringid)
+	void WriteStringID(const std::string &name, int stringid)
 	{
 		if (stringid == (int)this->strings.size()) this->strings.emplace_back(name);
 	}
@@ -274,7 +274,7 @@ static void ExtractStringParams(const StringData &data, StringParamsList &params
 		if (ls != nullptr) {
 			StringParams &param = params.emplace_back();
 			ParsedCommandStruct pcs;
-			ExtractCommandString(&pcs, ls->english, false);
+			ExtractCommandString(&pcs, ls->english.c_str(), false);
 
 			for (const CmdStruct *cs : pcs.cmd) {
 				if (cs == nullptr) break;
