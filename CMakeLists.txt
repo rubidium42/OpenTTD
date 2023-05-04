@@ -250,6 +250,7 @@ target_precompile_headers(openttd_lib
     PRIVATE
     src/stdafx.h
     src/3rdparty/fmt/format.h
+    "${CMAKE_BINARY_DIR}/generated/table/strings.h"
 )
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/bin)
