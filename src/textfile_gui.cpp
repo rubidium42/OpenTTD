@@ -363,7 +363,7 @@ static void Xunzip(byte **bufp, size_t *sizep)
 	std::string_view sv_buf(buf, filesize);
 
 	/* Check for the byte-order-mark, and skip it if needed. */
-	if (StrStartsWith(sv_buf, u8"\ufeff")) sv_buf.remove_prefix(3);
+	if (StrStartsWith(sv_buf, "\ufeff")) sv_buf.remove_prefix(3);
 
 	/* Replace any invalid characters with a question-mark. This copies the buf in the process. */
 	this->LoadText(sv_buf);
