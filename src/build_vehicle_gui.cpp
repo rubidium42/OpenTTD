@@ -1792,7 +1792,7 @@ struct BuildVehicleWindow : Window {
 					r,
 					this->eng_list,
 					this->vscroll->GetPosition(),
-					static_cast<uint16_t>(std::min<size_t>(this->vscroll->GetPosition() + this->vscroll->GetCapacity(), this->eng_list.size())),
+					static_cast<int>(std::min<size_t>(this->vscroll->GetPosition() + this->vscroll->GetCapacity(), this->eng_list.size())),
 					this->sel_engine,
 					false,
 					DEFAULT_GROUP
