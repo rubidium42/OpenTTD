@@ -20,7 +20,33 @@
  *
  * @see TileDiffXY(int, int)
  */
+#ifndef _DEBUG
 typedef int32_t TileIndexDiff;
+#else
+struct TileIndexDiff {
+public:
+	friend inline TileIndexDiff TileDiffXY(int x, int y);
+	friend TileIndex operator-(const TileIndex &tile, const TileIndexDiff &offset);
+	friend TileIndex operator+(const TileIndex &tile, const TileIndexDiff &offset);
+
+	constexpr TileIndexDiff operator*(int amount) const { return { this->x * amount, this->y * amount }; }
+	constexpr TileIndexDiff& operator*=(int amount) { this->x *= amount; this->y *= amount; return *this; }
+	constexpr TileIndexDiff& operator+=(const TileIndexDiff &other) { this->x += other.x; this->y += other.y; return *this; }
+
+	constexpr bool operator<=>(const TileIndexDiff&) const = default;
+
+private:
+	constexpr TileIndexDiff(int x, int y) : x(x), y(y) {}
+
+	int x;
+	int y;
+};
+#endif
+
+TileIndex operator-(const TileIndex &tile, const TileIndexDiff &offset);
+TileIndex operator+(const TileIndex &tile, const TileIndexDiff &offset);
+TileIndex& operator-=(TileIndex &tile, const TileIndexDiff &offset);
+TileIndex& operator+=(TileIndex &tile, const TileIndexDiff &offset);
 
 /**
  * A pair-construct of a TileIndexDiff.

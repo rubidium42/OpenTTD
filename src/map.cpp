@@ -63,23 +63,32 @@
 }
 
 
-#ifdef _DEBUG
-TileIndex TileAdd(TileIndex tile, TileIndexDiff offset)
+TileIndex operator-(const TileIndex &tile, const TileIndexDiff &offset)
 {
-	int dx = offset & Map::MaxX();
-	if (dx >= (int)Map::SizeX() / 2) dx -= Map::SizeX();
-	int dy = (offset - dx) / (int)Map::SizeX();
+	return tile + TileIndexDiff(-offset.x, -offset.y);
+}
 
-	uint32_t x = TileX(tile) + dx;
-	uint32_t y = TileY(tile) + dy;
-
+TileIndex operator+(const TileIndex &tile, const TileIndexDiff &offset)
+{
+	uint x = TileX(tile) + offset.x;
+	uint y = TileY(tile) + offset.y;
 	assert(x < Map::SizeX());
 	assert(y < Map::SizeY());
-	assert(TileXY(x, y) == Map::WrapToMap(tile + offset));
-
 	return TileXY(x, y);
 }
-#endif
+
+TileIndex& operator-=(TileIndex &tile, const TileIndexDiff &offset)
+{
+	tile = tile - offset;
+	return tile;
+}
+
+TileIndex& operator+=(TileIndex &tile, const TileIndexDiff &offset)
+{
+	tile = tile + offset;
+	return tile;
+}
+
 
 /**
  * This function checks if we add addx/addy to tile, if we

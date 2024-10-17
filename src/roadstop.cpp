@@ -66,7 +66,7 @@ void RoadStop::MakeDriveThrough()
 	RoadStopType rst = GetRoadStopType(this->xy);
 	DiagDirection dir = GetRoadStopDir(this->xy);
 	/* Use absolute so we always go towards the northern tile */
-	TileIndexDiff offset = abs(TileOffsByDiagDir(dir));
+	TileIndexDiff offset = TileOffsByDiagDir(AxisToDiagDir(DiagDirToAxis(dir)));
 
 	/* Information about the tile north of us */
 	TileIndex north_tile = this->xy - offset;
@@ -134,7 +134,7 @@ void RoadStop::ClearDriveThrough()
 	RoadStopType rst = GetRoadStopType(this->xy);
 	DiagDirection dir = GetRoadStopDir(this->xy);
 	/* Use absolute so we always go towards the northern tile */
-	TileIndexDiff offset = abs(TileOffsByDiagDir(dir));
+	TileIndexDiff offset = TileOffsByDiagDir(AxisToDiagDir(DiagDirToAxis(dir)));
 
 	/* Information about the tile north of us */
 	TileIndex north_tile = this->xy - offset;
@@ -360,7 +360,7 @@ void RoadStop::Entry::Rebuild(const RoadStop *rs, int side)
 	rserh.dir = side ? dir : ReverseDiagDir(dir);
 
 	this->length = 0;
-	TileIndexDiff offset = abs(TileOffsByDiagDir(dir));
+	TileIndexDiff offset = TileOffsByDiagDir(AxisToDiagDir(DiagDirToAxis(dir)));
 	for (TileIndex tile = rs->xy; IsDriveThroughRoadStopContinuation(rs->xy, tile); tile += offset) {
 		this->length += TILE_SIZE;
 		FindVehicleOnPos(tile, &rserh, FindVehiclesInRoadStop);
@@ -382,7 +382,7 @@ void RoadStop::Entry::CheckIntegrity(const RoadStop *rs) const
 	if (!HasBit(rs->status, RSSFB_BASE_ENTRY)) return;
 
 	/* The tile 'before' the road stop must not be part of this 'line' */
-	assert(!IsDriveThroughRoadStopContinuation(rs->xy, rs->xy - abs(TileOffsByDiagDir(GetRoadStopDir(rs->xy)))));
+	assert(!IsDriveThroughRoadStopContinuation(rs->xy, rs->xy - TileOffsByDiagDir(AxisToDiagDir(DiagDirToAxis(GetRoadStopDir(rs->xy))))));
 
 	Entry temp;
 	temp.Rebuild(rs, rs->east == this);

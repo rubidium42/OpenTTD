@@ -364,18 +364,6 @@ public:
 };
 
 /**
- * An offset value between two tiles.
- *
- * This value is used for the difference between
- * two tiles. It can be added to a TileIndex to get
- * the resulting TileIndex of the start tile applied
- * with this saved difference.
- *
- * @see TileDiffXY(int, int)
- */
-typedef int32_t TileIndexDiff;
-
-/**
  * Returns the TileIndex of a coordinate.
  *
  * @param x The x coordinate of the tile
@@ -400,11 +388,15 @@ debug_inline static TileIndex TileXY(uint x, uint y)
  */
 inline TileIndexDiff TileDiffXY(int x, int y)
 {
+#ifndef _DEBUG
 	/* Multiplication gives much better optimization on MSVC than shifting.
 	 * 0 << shift isn't optimized to 0 properly.
 	 * Typically x and y are constants, and then this doesn't result
 	 * in any actual multiplication in the assembly code.. */
 	return (y * Map::SizeX()) + x;
+#else
+	return {x, y};
+#endif
 }
 
 /**
@@ -451,9 +443,8 @@ debug_inline static uint TileY(TileIndex tile)
  */
 inline TileIndexDiff ToTileIndexDiff(TileIndexDiffC tidc)
 {
-	return (tidc.y << Map::LogX()) + tidc.x;
+	return TileDiffXY(tidc.x, tidc.y);
 }
-
 
 /**
  * Adds a given offset to a tile.
@@ -462,11 +453,7 @@ inline TileIndexDiff ToTileIndexDiff(TileIndexDiffC tidc)
  * @param offset The offset to add.
  * @return The resulting tile.
  */
-#ifndef _DEBUG
-	constexpr TileIndex TileAdd(TileIndex tile, TileIndexDiff offset) { return tile + offset; }
-#else
-	TileIndex TileAdd(TileIndex tile, TileIndexDiff offset);
-#endif
+inline TileIndex TileAdd(TileIndex tile, TileIndexDiff offset) { return tile + offset; }
 
 /**
  * Adds a given offset to a tile.
