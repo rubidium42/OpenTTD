@@ -368,11 +368,11 @@ static int32_t LookupWithBuildOnSlopes(::Slope slope, const Array<> &existing, i
 static bool NormaliseTileOffset(int32_t *tile)
 {
 		if (*tile == 1 || *tile == -1) return true;
-		if (*tile == ::TileDiffXY(0, -1)) {
+		if (*tile == TileIndex{} + ::TileDiffXY(0, -1)) {
 			*tile = -2;
 			return true;
 		}
-		if (*tile == ::TileDiffXY(0, 1)) {
+		if (*tile == TileIndex{} + ::TileDiffXY(0, 1)) {
 			*tile = 2;
 			return true;
 		}
@@ -417,7 +417,10 @@ static bool NormaliseTileOffset(int32_t *tile)
 
 	Array<> existing;
 	for (uint i = 0; i < lengthof(neighbours); i++) {
-		if (HasBit(rb, i)) existing.emplace_back(neighbours[i]);
+		if (HasBit(rb, i)) {
+			TileIndex t = TileIndex{} + neighbours[i];
+			//existing.emplace_back((int32_t)t);
+		}
 	}
 
 	return ScriptRoad::CanBuildConnectedRoadParts(ScriptTile::GetSlope(tile), std::move(existing), start - tile, end - tile);

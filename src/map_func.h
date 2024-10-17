@@ -388,11 +388,15 @@ debug_inline static TileIndex TileXY(uint x, uint y)
  */
 inline TileIndexDiff TileDiffXY(int x, int y)
 {
+#ifndef _DEBUG
 	/* Multiplication gives much better optimization on MSVC than shifting.
 	 * 0 << shift isn't optimized to 0 properly.
 	 * Typically x and y are constants, and then this doesn't result
 	 * in any actual multiplication in the assembly code.. */
 	return (y * Map::SizeX()) + x;
+#else
+	return {x, y};
+#endif
 }
 
 /**
@@ -442,7 +446,6 @@ inline TileIndexDiff ToTileIndexDiff(TileIndexDiffC tidc)
 	return TileDiffXY(tidc.x, tidc.y);
 }
 
-
 /**
  * Adds a given offset to a tile.
  *
@@ -450,11 +453,7 @@ inline TileIndexDiff ToTileIndexDiff(TileIndexDiffC tidc)
  * @param offset The offset to add.
  * @return The resulting tile.
  */
-#ifndef _DEBUG
-	constexpr TileIndex TileAdd(TileIndex tile, TileIndexDiff offset) { return tile + offset; }
-#else
-	TileIndex TileAdd(TileIndex tile, TileIndexDiff offset);
-#endif
+inline TileIndex TileAdd(TileIndex tile, TileIndexDiff offset) { return tile + offset; }
 
 /**
  * Adds a given offset to a tile.

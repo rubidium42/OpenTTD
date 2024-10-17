@@ -235,7 +235,7 @@ CommandCost CmdBuildRailWaypoint(DoCommandFlag flags, TileIndex start_tile, Axis
 	/* Check whether the tiles we're building on are valid rail or not. */
 	TileIndexDiff offset = TileOffsByDiagDir(AxisToDiagDir(OtherAxis(axis)));
 	for (int i = 0; i < count; i++) {
-		TileIndex tile = start_tile + i * offset;
+		TileIndex tile = start_tile + offset * i;
 		CommandCost ret = IsValidTileForWaypoint(tile, axis, &est);
 		if (ret.Failed()) return ret;
 	}
@@ -245,7 +245,7 @@ CommandCost CmdBuildRailWaypoint(DoCommandFlag flags, TileIndex start_tile, Axis
 	if (ret.Failed()) return ret;
 
 	/* Check if there is an already existing, deleted, waypoint close to us that we can reuse. */
-	TileIndex center_tile = start_tile + (count / 2) * offset;
+	TileIndex center_tile = start_tile + offset * (count / 2);
 	if (wp == nullptr && reuse) wp = FindDeletedWaypointCloseTo(center_tile, STR_SV_STNAME_WAYPOINT, _current_company, false);
 
 	if (wp != nullptr) {
@@ -296,7 +296,7 @@ CommandCost CmdBuildRailWaypoint(DoCommandFlag flags, TileIndex start_tile, Axis
 
 		Company *c = Company::Get(wp->owner);
 		for (int i = 0; i < count; i++) {
-			TileIndex tile = start_tile + i * offset;
+			TileIndex tile = start_tile + offset * i;
 			uint8_t old_specindex = HasStationTileRail(tile) ? GetCustomStationSpecIndex(tile) : 0;
 			if (!HasStationTileRail(tile)) c->infrastructure.station++;
 			bool reserved = IsTileType(tile, MP_RAILWAY) ?
@@ -373,7 +373,7 @@ CommandCost CmdBuildRoadWaypoint(DoCommandFlag flags, TileIndex start_tile, Axis
 	if (ret.Failed()) return ret;
 
 	/* Check if there is an already existing, deleted, waypoint close to us that we can reuse. */
-	TileIndex center_tile = start_tile + (count / 2) * TileOffsByDiagDir(AxisToDiagDir(OtherAxis(axis)));;
+	TileIndex center_tile = start_tile + TileOffsByDiagDir(AxisToDiagDir(OtherAxis(axis))) * (count / 2);
 	if (wp == nullptr && reuse) wp = FindDeletedWaypointCloseTo(center_tile, STR_SV_STNAME_WAYPOINT, _current_company, true);
 
 	if (wp != nullptr) {
