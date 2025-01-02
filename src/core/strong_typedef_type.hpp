@@ -58,12 +58,12 @@ namespace StrongType {
 			friend constexpr TType operator --(TType &lhs, int) { TType res = lhs; lhs.value--; return res; }
 
 			friend constexpr TType &operator +=(TType &lhs, const TType &rhs) { lhs.value += rhs.value; return lhs; }
-			friend constexpr TType operator +(const TType &lhs, const TType &rhs) { return TType{ lhs.value + rhs.value }; }
-			friend constexpr TType operator +(const TType &lhs, const TBaseType &rhs) { return TType{ lhs.value + rhs }; }
+			friend constexpr TType operator +(const TType &lhs, const TType &rhs) { return TType{ static_cast<TBaseType>(lhs.value + rhs.value) }; }
+			friend constexpr TType operator +(const TType &lhs, const TBaseType &rhs) { return TType{ static_cast<TBaseType>(lhs.value + rhs) }; }
 
 			friend constexpr TType &operator -=(TType &lhs, const TType &rhs) { lhs.value -= rhs.value; return lhs; }
-			friend constexpr TType operator -(const TType &lhs, const TType &rhs) { return TType{ lhs.value - rhs.value }; }
-			friend constexpr TType operator -(const TType &lhs, const TBaseType &rhs) { return TType{ lhs.value - rhs }; }
+			friend constexpr TType operator -(const TType &lhs, const TType &rhs) { return TType{ static_cast<TBaseType>(lhs.value - rhs.value) }; }
+			friend constexpr TType operator -(const TType &lhs, const TBaseType &rhs) { return TType{ static_cast<TBaseType>(lhs.value - rhs) }; }
 
 			/* For most new types, the rest of the operators make no sense. For example,
 			 * what does it actually mean to multiply a Year with a value. Or to do a
