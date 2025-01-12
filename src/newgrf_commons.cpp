@@ -565,24 +565,6 @@ bool Convert8bitBooleanCallback(const GRFFile *grffile, uint16_t cbid, uint16_t 
 /* static */ std::vector<DrawTileSeqStruct> NewGRFSpriteLayout::result_seq;
 
 /**
- * Clone the building sprites of a spritelayout.
- * @param source The building sprites to copy.
- */
-void NewGRFSpriteLayout::Clone(const DrawTileSeqStruct *source)
-{
-	assert(this->seq == nullptr);
-	assert(source != nullptr);
-
-	size_t count = 1; // 1 for the terminator
-	const DrawTileSeqStruct *element;
-	foreach_draw_tile_seq(element, source) count++;
-
-	DrawTileSeqStruct *sprites = MallocT<DrawTileSeqStruct>(count);
-	MemCpyT(sprites, source, count);
-	this->seq = sprites;
-}
-
-/**
  * Clone a spritelayout.
  * @param source The spritelayout to copy.
  */
@@ -608,11 +590,10 @@ void NewGRFSpriteLayout::Clone(const NewGRFSpriteLayout *source)
  */
 void NewGRFSpriteLayout::Allocate(uint num_sprites)
 {
-	assert(this->seq == nullptr);
+	assert(this->seq.empty());
 
-	DrawTileSeqStruct *sprites = CallocT<DrawTileSeqStruct>(num_sprites + 1);
-	sprites[num_sprites].MakeTerminator();
-	this->seq = sprites;
+	this->seq.resize(num_sprites + 1, {});
+	this->seq[num_sprites].MakeTerminator();
 }
 
 /**
@@ -620,7 +601,7 @@ void NewGRFSpriteLayout::Allocate(uint num_sprites)
  */
 void NewGRFSpriteLayout::AllocateRegisters()
 {
-	assert(this->seq != nullptr);
+	assert(!this->seq.empty());
 	assert(this->registers == nullptr);
 
 	size_t count = 1; // 1 for the ground sprite
@@ -664,7 +645,7 @@ uint32_t NewGRFSpriteLayout::PrepareLayout(uint32_t orig_offset, uint32_t newgrf
 	 * and apply the default sprite offsets (unless disabled). */
 	const TileLayoutRegisters *regs = this->registers;
 	bool ground = true;
-	foreach_draw_tile_seq(result, result_seq.data()) {
+	foreach_draw_tile_seq(result, result_seq) {
 		TileLayoutFlags flags = TLF_NOTHING;
 		if (regs != nullptr) flags = regs->flags;
 
@@ -718,7 +699,7 @@ void NewGRFSpriteLayout::ProcessRegisters(uint8_t resolved_var10, uint32_t resol
 	DrawTileSeqStruct *result;
 	const TileLayoutRegisters *regs = this->registers;
 	bool ground = true;
-	foreach_draw_tile_seq(result, result_seq.data()) {
+	foreach_draw_tile_seq(result, result_seq) {
 		TileLayoutFlags flags = TLF_NOTHING;
 		if (regs != nullptr) flags = regs->flags;
 
