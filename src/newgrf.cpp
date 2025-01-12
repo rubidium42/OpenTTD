@@ -1984,25 +1984,24 @@ static ChangeInfoResult StationChangeInfo(uint first, uint last, int prop, ByteR
 					/* On error, bail out immediately. Temporary GRF data was already freed */
 					if (_cur.skip_sprites < 0) return CIR_DISABLED;
 
-					std::vector<DrawTileSeqStruct> tmp_layout;
 					for (;;) {
-						/* no relative bounding box support */
-						DrawTileSeqStruct &dtss = tmp_layout.emplace_back();
-						MemSetT(&dtss, 0);
+						uint8_t delta_x = buf.ReadByte();
+						if (delta_x == 0x80) break;
 
-						dtss.delta_x = buf.ReadByte();
-						if (dtss.IsTerminator()) break;
-						dtss.delta_y = buf.ReadByte();
-						dtss.delta_z = buf.ReadByte();
-						dtss.size_x = buf.ReadByte();
-						dtss.size_y = buf.ReadByte();
-						dtss.size_z = buf.ReadByte();
+						/* no relative bounding box support */
+						DrawTileSeqStruct &dtss = dts->seq.emplace_back(DrawTileSeqStruct{
+							.delta_x = static_cast<int8_t>(delta_x),
+							.delta_y = static_cast<int8_t>(buf.ReadByte()),
+							.delta_z = static_cast<int8_t>(buf.ReadByte()),
+							.size_x = buf.ReadByte(),
+							.size_y = buf.ReadByte(),
+							.size_z = buf.ReadByte()
+						});
 
 						ReadSpriteLayoutSprite(buf, false, true, false, GSF_STATIONS, &dtss.image);
 						/* On error, bail out immediately. Temporary GRF data was already freed */
 						if (_cur.skip_sprites < 0) return CIR_DISABLED;
 					}
-					dts->seq = std::move(tmp_layout);
 				}
 
 				/* Number of layouts must be even, alternating X and Y */
