@@ -56,8 +56,13 @@ struct DrawTileSeqStruct {
  * For allocated ones from NewGRF see #NewGRFSpriteLayout.
  */
 struct DrawTileSprites {
-	PalSpriteID ground;           ///< Palette and sprite for the ground
-	const DrawTileSeqStruct *seq; ///< Array of child sprites. Terminated with a terminator entry
+	template <size_t N>
+	DrawTileSprites(PalSpriteID ground, const DrawTileSeqStruct (&seq)[N]) : ground(ground), seq(std::begin(seq), std::end(seq)) {}
+	DrawTileSprites(PalSpriteID ground) : ground(ground) {}
+	DrawTileSprites() = default;
+
+	PalSpriteID ground; ///< Palette and sprite for the ground
+	std::vector<DrawTileSeqStruct> seq; ///< Child sprites,
 };
 
 /**
@@ -76,7 +81,7 @@ struct DrawBuildingsTileStruct {
 };
 
 /** Iterate through all DrawTileSeqStructs in DrawTileSprites. */
-#define foreach_draw_tile_seq(idx, list) for (idx = list; !idx->IsTerminator(); idx++)
+#define foreach_draw_tile_seq(idx, list) for (idx = list.data(); !idx->IsTerminator(); idx++)
 
 void DrawCommonTileSeq(const struct TileInfo *ti, const DrawTileSprites *dts, TransparencyOption to, int32_t orig_offset, uint32_t newgrf_offset, PaletteID default_palette, bool child_offset_is_unsigned);
 void DrawCommonTileSeqInGUI(int x, int y, const DrawTileSprites *dts, int32_t orig_offset, uint32_t newgrf_offset, PaletteID default_palette, bool child_offset_is_unsigned);

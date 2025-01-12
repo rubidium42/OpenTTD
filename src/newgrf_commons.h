@@ -120,7 +120,6 @@ struct NewGRFSpriteLayout : ZeroedMemoryAllocator, DrawTileSprites {
 
 	void Allocate(uint num_sprites);
 	void AllocateRegisters();
-	void Clone(const DrawTileSeqStruct *source);
 	void Clone(const NewGRFSpriteLayout *source);
 
 	/**
@@ -130,13 +129,13 @@ struct NewGRFSpriteLayout : ZeroedMemoryAllocator, DrawTileSprites {
 	void Clone(const DrawTileSprites *source)
 	{
 		assert(source != nullptr && this != source);
+		assert(this->seq.empty() && !source->seq.empty());
 		this->ground = source->ground;
-		this->Clone(source->seq);
+		this->seq = source->seq;
 	}
 
 	virtual ~NewGRFSpriteLayout()
 	{
-		free(this->seq);
 		free(this->registers);
 	}
 
@@ -159,11 +158,10 @@ struct NewGRFSpriteLayout : ZeroedMemoryAllocator, DrawTileSprites {
 	 * @pre #PrepareLayout() and #ProcessRegisters() need calling first.
 	 * @return result spritelayout
 	 */
-	const DrawTileSeqStruct *GetLayout(PalSpriteID *ground) const
+	std::vector<DrawTileSeqStruct> GetLayout(PalSpriteID *ground) const
 	{
-		DrawTileSeqStruct *front = result_seq.data();
-		*ground = front->image;
-		return front + 1;
+		*ground = result_seq[0].image;
+		return std::vector<DrawTileSeqStruct>(++result_seq.begin(), result_seq.end());
 	}
 
 private:
