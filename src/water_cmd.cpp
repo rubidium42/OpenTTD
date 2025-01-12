@@ -797,17 +797,18 @@ static void DrawCanalWater(TileIndex tile)
  * Draw a build sprite sequence for water tiles.
  * If buildings are invisible, nothing will be drawn.
  * @param ti      Tile info.
- * @param dtss     Sprite sequence to draw.
+ * @param seq Sprite sequence to draw.
  * @param base    Base sprite.
  * @param offset  Additional sprite offset.
  * @param palette Palette to use.
  */
-static void DrawWaterTileStruct(const TileInfo *ti, const DrawTileSeqStruct *dtss, SpriteID base, uint offset, PaletteID palette, CanalFeature feature)
+static void DrawWaterTileStruct(const TileInfo *ti, const std::vector<DrawTileSeqStruct> &seq, SpriteID base, uint offset, PaletteID palette, CanalFeature feature)
 {
 	/* Don't draw if buildings are invisible. */
 	if (IsInvisibilitySet(TO_BUILDINGS)) return;
 
-	for (; !dtss->IsTerminator(); dtss++) {
+	const DrawTileSeqStruct *dtss;
+	foreach_draw_tile_seq(dtss, seq) {
 		uint tile_offs = offset + dtss->image.sprite;
 		if (feature < CF_END) tile_offs = GetCanalSpriteOffset(feature, ti->tile, tile_offs);
 		AddSortableSpriteToDraw(base + tile_offs, palette,

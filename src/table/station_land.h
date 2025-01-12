@@ -801,7 +801,7 @@ static const DrawTileSeqStruct _station_display_datas_waypoint_Y[] = {
  * @param dtss  Sequence child sprites of the tile
  */
 #define TILE_SPRITE_LINE(img, dtss) { {img, PAL_NONE}, dtss },
-#define TILE_SPRITE_NULL() { {0, 0}, nullptr },
+#define TILE_SPRITE_NULL() { {0, 0} },
 
 extern const DrawTileSprites _station_display_datas_rail[] = {
 	TILE_SPRITE_LINE(SPR_RAIL_TRACK_X,               _station_display_datas_0)
@@ -970,10 +970,10 @@ static const DrawTileSprites _station_display_datas_bus[] = {
 };
 
 static const DrawTileSprites _station_display_datas_road_waypoint[] = {
-	TILE_SPRITE_LINE(0, nullptr)
-	TILE_SPRITE_LINE(0, nullptr)
-	TILE_SPRITE_LINE(0, nullptr)
-	TILE_SPRITE_LINE(0, nullptr)
+	TILE_SPRITE_NULL()
+	TILE_SPRITE_NULL()
+	TILE_SPRITE_NULL()
+	TILE_SPRITE_NULL()
 	TILE_SPRITE_LINE(SPR_ROAD_PAVED_STRAIGHT_X,      _station_display_datas_road_waypoint_X)
 	TILE_SPRITE_LINE(SPR_ROAD_PAVED_STRAIGHT_Y,      _station_display_datas_road_waypoint_Y)
 };
