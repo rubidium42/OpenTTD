@@ -120,19 +120,6 @@ struct NewGRFSpriteLayout : ZeroedMemoryAllocator, DrawTileSprites {
 
 	void Allocate(uint num_sprites);
 	void AllocateRegisters();
-	void Clone(const NewGRFSpriteLayout *source);
-
-	/**
-	 * Clone a spritelayout.
-	 * @param source The spritelayout to copy.
-	 */
-	void Clone(const DrawTileSprites *source)
-	{
-		assert(source != nullptr && this != source);
-		assert(this->seq.empty() && !source->seq.empty());
-		this->ground = source->ground;
-		this->seq = source->seq;
-	}
 
 	/**
 	 * Tests whether this spritelayout needs preprocessing by

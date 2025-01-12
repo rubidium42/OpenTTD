@@ -1976,7 +1976,9 @@ static ChangeInfoResult StationChangeInfo(uint first, uint last, int prop, ByteR
 					if (buf.HasData(4) && buf.PeekDWord() == 0) {
 						buf.Skip(4);
 						extern const DrawTileSprites _station_display_datas_rail[8];
-						dts->Clone(&_station_display_datas_rail[t % 8]);
+						const DrawTileSprites &dtss = _station_display_datas_rail[t % 8];
+						dts->ground = dtss.ground;
+						dts->seq = dtss.seq;
 						continue;
 					}
 
@@ -2025,8 +2027,7 @@ static ChangeInfoResult StationChangeInfo(uint first, uint last, int prop, ByteR
 				statspec->renderdata.reserve(srcstatspec->renderdata.size());
 
 				for (const auto &it : srcstatspec->renderdata) {
-					NewGRFSpriteLayout *dts = &statspec->renderdata.emplace_back();
-					dts->Clone(&it);
+					statspec->renderdata.emplace_back(it);
 				}
 				break;
 			}
