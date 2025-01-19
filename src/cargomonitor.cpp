@@ -123,7 +123,7 @@ void AddCargoDelivery(CargoType cargo_type, CompanyID company, uint32_t amount, 
 		/* Handle pickup update. */
 		switch (src_type) {
 			case SourceType::Industry: {
-				CargoMonitorID num = EncodeCargoIndustryMonitor(company, cargo_type, src);
+				CargoMonitorID num = EncodeCargoIndustryMonitor(company, cargo_type, static_cast<IndustryID>(src));
 				CargoMonitorMap::iterator iter = _cargo_pickups.find(num);
 				if (iter != _cargo_pickups.end()) iter->second += amount;
 				break;
