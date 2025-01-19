@@ -129,7 +129,7 @@ void AddCargoDelivery(CargoID cargo_type, CompanyID company, uint32_t amount, So
 				break;
 			}
 			case SourceType::Town: {
-				CargoMonitorID num = EncodeCargoTownMonitor(company, cargo_type, src);
+				CargoMonitorID num = EncodeCargoTownMonitor(company, cargo_type, static_cast<TownID>(src));
 				CargoMonitorMap::iterator iter = _cargo_pickups.find(num);
 				if (iter != _cargo_pickups.end()) iter->second += amount;
 				break;

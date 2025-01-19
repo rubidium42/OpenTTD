@@ -12,8 +12,10 @@
 
 #include "core/enum_type.hpp"
 
-typedef uint16_t TownID;
-static const TownID INVALID_TOWN = 0xFFFF;
+enum TownID : uint16_t {
+	TOWN_BEGIN,
+	INVALID_TOWN = 0xFFFF
+};
 
 struct Town;
 

@@ -1010,7 +1010,7 @@ bool AfterLoadGame()
 					if ((GB(t.m5(), 4, 2) == ROAD_TILE_CROSSING ? (Owner)t.m3() : GetTileOwner(t)) == OWNER_TOWN) {
 						SetTownIndex(t, CalcClosestTownFromTile(t)->index);
 					} else {
-						SetTownIndex(t, 0);
+						SetTownIndex(t, TOWN_BEGIN);
 					}
 					break;
 
@@ -1234,7 +1234,7 @@ bool AfterLoadGame()
 								GetRailType(t)
 							);
 						} else {
-							TownID town = IsTileOwner(t, OWNER_TOWN) ? ClosestTownFromTile(t, UINT_MAX)->index : 0;
+							TownID town = IsTileOwner(t, OWNER_TOWN) ? ClosestTownFromTile(t, UINT_MAX)->index : TOWN_BEGIN;
 
 							/* MakeRoadNormal */
 							SetTileType(t, MP_ROAD);
