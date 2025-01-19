@@ -62,4 +62,6 @@ void DeleteVehicleNews(VehicleID vid, AdviceType advice_type = AdviceType::Inval
 void DeleteStationNews(StationID sid);
 void DeleteIndustryNews(IndustryID iid);
 
+uint32_t SerialiseNewsReference(const NewsReference &reference);
+
 #endif /* NEWS_FUNC_H */

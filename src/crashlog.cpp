@@ -18,6 +18,7 @@
 #include "saveload/saveload.h"
 #include "screenshot.h"
 #include "network/network_survey.h"
+#include "news_func.h"
 #include "news_gui.h"
 #include "fileio_func.h"
 #include "fileio_type.h"
@@ -45,26 +46,6 @@ static void SurveyGamelog(nlohmann::json &json)
 	_gamelog.Print([&json](const std::string &s) {
 		json.push_back(s);
 	});
-}
-
-/**
- * Encode a NewsReference for serialisation, e.g. for writing in the crash log.
- * @param reference The reference to serialise.
- * @return Reference serialised into a single uint32_t.
- */
-static uint32_t SerialiseNewsReference(const NewsReference &reference)
-{
-	struct visitor {
-		uint32_t operator()(const std::monostate &) { return 0; }
-		uint32_t operator()(const TileIndex &t) { return t.base(); }
-		uint32_t operator()(const VehicleID v) { return v; }
-		uint32_t operator()(const StationID s) { return s; }
-		uint32_t operator()(const IndustryID i) { return i; }
-		uint32_t operator()(const TownID t) { return t; }
-		uint32_t operator()(const EngineID e) { return e; }
-	};
-
-	return std::visit(visitor{}, reference);
 }
 
 /**

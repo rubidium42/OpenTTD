@@ -911,6 +911,26 @@ void AddNewsItem(StringID string, NewsType type, NewsFlag flags, NewsReference r
 }
 
 /**
+ * Encode a NewsReference for serialisation, e.g. for writing in the crash log.
+ * @param reference The reference to serialise.
+ * @return Reference serialised into a single uint32_t.
+ */
+uint32_t SerialiseNewsReference(const NewsReference &reference)
+{
+	struct visitor {
+		uint32_t operator()(const std::monostate &) { return 0; }
+		uint32_t operator()(const TileIndex &t) { return t.base(); }
+		uint32_t operator()(const VehicleID v) { return v; }
+		uint32_t operator()(const StationID s) { return s; }
+		uint32_t operator()(const IndustryID i) { return i; }
+		uint32_t operator()(const TownID t) { return t; }
+		uint32_t operator()(const EngineID e) { return e; }
+	};
+
+	return std::visit(visitor{}, reference);
+}
+
+/**
  * Create a new custom news item.
  * @param flags type of operation
  * @aram type NewsType of the message.
@@ -920,7 +940,7 @@ void AddNewsItem(StringID string, NewsType type, NewsFlag flags, NewsReference r
  * @param text The text of the news message.
  * @return the cost of this operation or an error
  */
-CommandCost CmdCustomNewsItem(DoCommandFlag flags, NewsType type, NewsReferenceType reftype1, CompanyID company, uint32_t reference_id, const std::string &text)
+CommandCost CmdCustomNewsItem(DoCommandFlag flags, NewsType type, CompanyID company, NewsReference reference, const std::string &text)
 {
 	if (_current_company != OWNER_DEITY) return CMD_ERROR;
 
@@ -928,41 +948,17 @@ CommandCost CmdCustomNewsItem(DoCommandFlag flags, NewsType type, NewsReferenceT
 	if (type >= NT_END) return CMD_ERROR;
 	if (text.empty()) return CMD_ERROR;
 
-	NewsReference reference;
-	switch (reftype1) {
-		case NR_NONE: break;
-		case NR_TILE:
-			if (!IsValidTile(reference_id)) return CMD_ERROR;
-			reference = static_cast<TileIndex>(reference_id);
-			break;
+	struct visitor {
+		bool operator()(const std::monostate &) { return true; }
+		bool operator()(const TileIndex t) { return IsValidTile(t); }
+		bool operator()(const VehicleID v) { return Vehicle::IsValidID(v); }
+		bool operator()(const StationID s) { return Station::IsValidID(s); }
+		bool operator()(const IndustryID i) { return Industry::IsValidID(i); }
+		bool operator()(const TownID t) { return Town::IsValidID(t); }
+		bool operator()(const EngineID e) { return Engine::IsValidID(e); }
+	};
 
-		case NR_VEHICLE:
-			if (!Vehicle::IsValidID(reference_id)) return CMD_ERROR;
-			reference = static_cast<VehicleID>(reference_id);
-			break;
-
-		case NR_STATION:
-			if (!Station::IsValidID(reference_id)) return CMD_ERROR;
-			reference = static_cast<StationID>(reference_id);
-			break;
-
-		case NR_INDUSTRY:
-			if (!Industry::IsValidID(reference_id)) return CMD_ERROR;
-			reference = static_cast<IndustryID>(reference_id);
-			break;
-
-		case NR_TOWN:
-			if (!Town::IsValidID(reference_id)) return CMD_ERROR;
-			reference = static_cast<TownID>(reference_id);
-			break;
-
-		case NR_ENGINE:
-			if (!Engine::IsValidID(reference_id)) return CMD_ERROR;
-			reference = static_cast<EngineID>(reference_id);
-			break;
-
-		default: return CMD_ERROR;
-	}
+	if (!std::visit(visitor{}, reference)) return CMD_ERROR;
 
 	if (company != INVALID_OWNER && company != _local_company) return CommandCost();
 
