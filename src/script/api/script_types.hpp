@@ -117,7 +117,9 @@ typedef uint16_t EngineID;     ///< The ID of an engine.
 #endif /* DOXYGEN_API */
 typedef uint16_t GoalID;       ///< The ID of a goal.
 typedef uint16_t GroupID;      ///< The ID of a group.
+#ifdef DOXYGEN_API
 typedef uint16_t IndustryID;   ///< The ID of an industry.
+#endif /* DOXYGEN_API */
 typedef uint8_t IndustryType;  ///< The ID of an industry-type.
 #ifdef DOXYGEN_API
 typedef int64_t Money;         ///< Money, stored in a 32bit/64bit safe way. For scripts money is always in pounds.
