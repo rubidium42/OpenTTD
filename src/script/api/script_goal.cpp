@@ -42,7 +42,7 @@
 			(type == GT_STORY_PAGE && story_page != nullptr && (c == INVALID_COMPANY ? story_page->company == INVALID_COMPANY : story_page->company == INVALID_COMPANY || story_page->company == c));
 }
 
-/* static */ ScriptGoal::GoalID ScriptGoal::New(ScriptCompany::CompanyID company, Text *goal, GoalType type, SQInteger destination)
+/* static */ GoalID ScriptGoal::New(ScriptCompany::CompanyID company, Text *goal, GoalType type, SQInteger destination)
 {
 	ScriptObjectRef counter(goal);
 
@@ -56,7 +56,7 @@
 	if (!ScriptObject::Command<CMD_CREATE_GOAL>::Do(&ScriptInstance::DoCommandReturnGoalID, (::CompanyID)company, (::GoalType)type, destination, text)) return GOAL_INVALID;
 
 	/* In case of test-mode, we return GoalID 0 */
-	return (ScriptGoal::GoalID)0;
+	return ::GOAL_BEGIN;
 }
 
 /* static */ bool ScriptGoal::Remove(GoalID goal_id)
