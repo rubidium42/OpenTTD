@@ -136,8 +136,8 @@ typedef uint16_t StoryPageElementID; ///< The ID of a story page element.
 #ifdef DOXYGEN_API
 typedef uint32_t TileIndex;    ///< The ID of a map location.
 typedef uint16_t TownID;       ///< The ID of a town.
-#endif /* DOXYGEN_API */
 typedef uint32_t VehicleID;    ///< The ID of a vehicle.
+#endif /* DOXYGEN_API */
 
 /**
  * The types of errors inside the script framework.
