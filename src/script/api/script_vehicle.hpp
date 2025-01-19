@@ -11,6 +11,7 @@
 #define SCRIPT_VEHICLE_HPP
 
 #include "script_road.hpp"
+#include "../../engine_type.h"
 
 /**
  * Class that handles all vehicle related functions.

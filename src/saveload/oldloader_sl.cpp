@@ -342,8 +342,9 @@ static Engine *_old_engines;
 
 static bool FixTTOEngines()
 {
+	using OldEngineID = uint8_t;
 	/** TTD->TTO remapping of engines; 255 means there is no equivalent. SVXConverter uses (almost) the same table. */
-	static const EngineID ttd_to_tto[] = {
+	static const OldEngineID ttd_to_tto[] = {
 		  0, 255, 255, 255, 255, 255, 255, 255,   5,   7,   8,   9,  10,  11,  12,  13,
 		255, 255, 255, 255, 255, 255,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,
 		25,   26,  27,  29,  28,  30, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
@@ -363,7 +364,7 @@ static bool FixTTOEngines()
 	};
 
 	/** TTO->TTD remapping of engines. SVXConverter uses the same table. */
-	static const EngineID tto_to_ttd[] = {
+	static const OldEngineID tto_to_ttd[] = {
 		  0,   0,   8,   8,   8,   8,   8,   9,  10,  11,  12,  13,  14,  15,  15,  22,
 		 23,  24,  25,  26,  27,  29,  28,  30,  31,  32,  33,  34,  35,  36,  37,  55,
 		 57,  59,  58,  60,  61,  62,  63,  64,  65,  66,  67, 116, 116, 117, 118, 123,
@@ -375,23 +376,23 @@ static bool FixTTOEngines()
 
 	for (Vehicle *v : Vehicle::Iterate()) {
 		if (v->engine_type >= lengthof(tto_to_ttd)) return false;
-		v->engine_type = tto_to_ttd[v->engine_type];
+		v->engine_type = static_cast<EngineID>(tto_to_ttd[v->engine_type]);
 	}
 
 	/* Load the default engine set. Many of them will be overridden later */
 	{
-		uint j = 0;
-		for (uint i = 0; i < lengthof(_orig_rail_vehicle_info); i++, j++) new (GetTempDataEngine(j)) Engine(VEH_TRAIN, i);
-		for (uint i = 0; i < lengthof(_orig_road_vehicle_info); i++, j++) new (GetTempDataEngine(j)) Engine(VEH_ROAD, i);
-		for (uint i = 0; i < lengthof(_orig_ship_vehicle_info); i++, j++) new (GetTempDataEngine(j)) Engine(VEH_SHIP, i);
-		for (uint i = 0; i < lengthof(_orig_aircraft_vehicle_info); i++, j++) new (GetTempDataEngine(j)) Engine(VEH_AIRCRAFT, i);
+		EngineID j = ENGINE_BEGIN;
+		for (uint16_t i = 0; i < lengthof(_orig_rail_vehicle_info); i++, j++) new (GetTempDataEngine(j)) Engine(VEH_TRAIN, i);
+		for (uint16_t i = 0; i < lengthof(_orig_road_vehicle_info); i++, j++) new (GetTempDataEngine(j)) Engine(VEH_ROAD, i);
+		for (uint16_t i = 0; i < lengthof(_orig_ship_vehicle_info); i++, j++) new (GetTempDataEngine(j)) Engine(VEH_SHIP, i);
+		for (uint16_t i = 0; i < lengthof(_orig_aircraft_vehicle_info); i++, j++) new (GetTempDataEngine(j)) Engine(VEH_AIRCRAFT, i);
 	}
 
 	TimerGameCalendar::Date aging_date = std::min(TimerGameCalendar::date + CalendarTime::DAYS_TILL_ORIGINAL_BASE_YEAR, TimerGameCalendar::ConvertYMDToDate(TimerGameCalendar::Year{2050}, 0, 1));
 	TimerGameCalendar::YearMonthDay aging_ymd = TimerGameCalendar::ConvertDateToYMD(aging_date);
 
-	for (EngineID i = 0; i < 256; i++) {
-		int oi = ttd_to_tto[i];
+	for (EngineID i = ENGINE_BEGIN; i < 256; i++) {
+		OldEngineID oi = ttd_to_tto[i];
 		Engine *e = GetTempDataEngine(i);
 
 		if (oi == 255) {
@@ -1438,13 +1439,13 @@ static const OldChunks engine_chunk[] = {
 
 static bool LoadOldEngine(LoadgameState *ls, int num)
 {
-	Engine *e = _savegame_type == SGT_TTO ? &_old_engines[num] : GetTempDataEngine(num);
+	Engine *e = _savegame_type == SGT_TTO ? &_old_engines[num] : GetTempDataEngine(static_cast<EngineID>(num));
 	return LoadChunk(ls, e, engine_chunk);
 }
 
 static bool LoadOldEngineName(LoadgameState *ls, int num)
 {
-	Engine *e = GetTempDataEngine(num);
+	Engine *e = GetTempDataEngine(static_cast<EngineID>(num));
 	e->name = CopyFromOldName(RemapOldStringID(ReadUint16(ls)));
 	return true;
 }

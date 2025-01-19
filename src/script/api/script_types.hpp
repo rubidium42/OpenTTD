@@ -112,7 +112,9 @@
 /* Define all types here, so they are added to the API docs. */
 typedef uint BridgeID;         ///< The ID of a bridge type.
 typedef uint8_t CargoID;       ///< The ID of a cargo.
+#ifdef DOXYGEN_API
 typedef uint16_t EngineID;     ///< The ID of an engine.
+#endif /* DOXYGEN_API */
 typedef uint16_t GoalID;       ///< The ID of a goal.
 typedef uint16_t GroupID;      ///< The ID of a group.
 typedef uint16_t IndustryID;   ///< The ID of an industry.
