@@ -22,11 +22,21 @@ constexpr std::underlying_type_t<enum_type> to_underlying(enum_type e) { return 
 		e = static_cast<enum_type>(to_underlying(e) + 1); \
 		return e_org; \
 	} \
+	inline constexpr enum_type& operator ++(enum_type& e) \
+	{ \
+		e = static_cast<enum_type>(to_underlying(e) + 1); \
+		return e; \
+	} \
 	inline constexpr enum_type operator --(enum_type& e, int) \
 	{ \
 		enum_type e_org = e; \
 		e = static_cast<enum_type>(to_underlying(e) - 1); \
 		return e_org; \
+	} \
+	inline constexpr enum_type& operator --(enum_type& e) \
+	{ \
+		e = static_cast<enum_type>(to_underlying(e) - 1); \
+		return e; \
 	}
 
 
