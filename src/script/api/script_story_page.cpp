@@ -43,7 +43,7 @@ static inline bool StoryPageElementTypeRequiresText(StoryPageElementType type)
 	return type == SPET_TEXT || type == SPET_LOCATION || type == SPET_GOAL || type == SPET_BUTTON_PUSH || type == SPET_BUTTON_TILE || type == SPET_BUTTON_VEHICLE;
 }
 
-/* static */ ScriptStoryPage::StoryPageID ScriptStoryPage::New(ScriptCompany::CompanyID company, Text *title)
+/* static */ StoryPageID ScriptStoryPage::New(ScriptCompany::CompanyID company, Text *title)
 {
 	ScriptObjectRef counter(title);
 
@@ -57,10 +57,10 @@ static inline bool StoryPageElementTypeRequiresText(StoryPageElementType type)
 		(::CompanyID)c, title != nullptr ? title->GetEncodedText() : std::string{})) return STORY_PAGE_INVALID;
 
 	/* In case of test-mode, we return StoryPageID 0 */
-	return (ScriptStoryPage::StoryPageID)0;
+	return ::STORY_PAGE_BEGIN;
 }
 
-/* static */ ScriptStoryPage::StoryPageElementID ScriptStoryPage::NewElement(StoryPageID story_page_id, StoryPageElementType type, SQInteger reference, Text *text)
+/* static */ StoryPageElementID ScriptStoryPage::NewElement(StoryPageID story_page_id, StoryPageElementType type, SQInteger reference, Text *text)
 {
 	ScriptObjectRef counter(text);
 
@@ -99,12 +99,12 @@ static inline bool StoryPageElementTypeRequiresText(StoryPageElementType type)
 
 	if (!ScriptObject::Command<CMD_CREATE_STORY_PAGE_ELEMENT>::Do(&ScriptInstance::DoCommandReturnStoryPageElementID,
 			reftile,
-			(::StoryPageID)story_page_id, (::StoryPageElementType)type,
+			story_page_id, btype,
 			refid,
 			encoded_text)) return STORY_PAGE_ELEMENT_INVALID;
 
 	/* In case of test-mode, we return StoryPageElementID 0 */
-	return (ScriptStoryPage::StoryPageElementID)0;
+	return ::STORY_PAGE_ELEMENT_BEGIN;
 }
 
 /* static */ bool ScriptStoryPage::UpdateElement(StoryPageElementID story_page_element_id, SQInteger reference, Text *text)

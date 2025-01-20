@@ -33,7 +33,7 @@
 	CompanyID c = (::CompanyID)company;
 	if (company == ScriptCompany::COMPANY_INVALID) c = INVALID_COMPANY;
 	StoryPage *story_page = nullptr;
-	if (type == GT_STORY_PAGE && ScriptStoryPage::IsValidStoryPage((ScriptStoryPage::StoryPageID)destination)) story_page = ::StoryPage::Get((ScriptStoryPage::StoryPageID)destination);
+	if (type == GT_STORY_PAGE && ScriptStoryPage::IsValidStoryPage(static_cast<StoryPageID>(destination))) story_page = ::StoryPage::Get(static_cast<StoryPageID>(destination));
 	return (type == GT_NONE && destination == 0) ||
 			(type == GT_TILE && ScriptMap::IsValidTile(::TileIndex(destination))) ||
 			(type == GT_INDUSTRY && ScriptIndustry::IsValidIndustry(static_cast<IndustryID>(destination))) ||
