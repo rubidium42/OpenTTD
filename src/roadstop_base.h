@@ -15,7 +15,7 @@
 #include "core/bitmath_func.hpp"
 #include "vehicle_type.h"
 
-typedef Pool<RoadStop, RoadStopID, 32, 64000> RoadStopPool;
+typedef Pool<RoadStop, RoadStopID, 32, ROADSTOP_END> RoadStopPool;
 extern RoadStopPool _roadstop_pool;
 
 /** A Stop for a Road Vehicle */

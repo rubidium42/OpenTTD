@@ -50,7 +50,7 @@ LinkGraphJob::LinkGraphJob(const LinkGraph &orig) :
 void LinkGraphJob::EraseFlows(NodeID from)
 {
 	for (NodeID node_id = 0; node_id < this->Size(); ++node_id) {
-		(*this)[node_id].flows.erase(from);
+		(*this)[node_id].flows.erase(static_cast<StationID>(from));
 	}
 }
 

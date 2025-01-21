@@ -445,7 +445,7 @@ StationIDStack OrderList::GetNextStoppingStation(const Vehicle *v, const Order *
 		}
 	} while (next->IsType(OT_GOTO_DEPOT) || next->GetDestination() == v->last_station_visited);
 
-	return next->GetDestination();
+	return static_cast<StationID>(next->GetDestination());
 }
 
 /**
@@ -2001,7 +2001,7 @@ bool UpdateOrderDest(Vehicle *v, const Order *order, int conditional_depth, bool
 
 	switch (order->GetType()) {
 		case OT_GOTO_STATION:
-			v->SetDestTile(v->GetOrderStationLocation(order->GetDestination()));
+			v->SetDestTile(v->GetOrderStationLocation(static_cast<StationID>(order->GetDestination())));
 			return true;
 
 		case OT_GOTO_DEPOT:
@@ -2053,7 +2053,7 @@ bool UpdateOrderDest(Vehicle *v, const Order *order, int conditional_depth, bool
 					DestinationID destination = a->current_order.GetDestination();
 					if (a->targetairport != destination) {
 						/* The aircraft is now heading for a different hangar than the next in the orders */
-						a->SetDestTile(a->GetOrderStationLocation(destination));
+						a->SetDestTile(a->GetOrderStationLocation(static_cast<StationID>(destination)));
 					}
 				}
 				return true;
@@ -2156,7 +2156,7 @@ bool ProcessOrders(Vehicle *v)
 		 * the train to stop at this 'via' station if the next order
 		 * is a no-non-stop order; in that case not setting the last
 		 * visited station will cause the vehicle to still stop. */
-		v->last_station_visited = v->current_order.GetDestination();
+		v->last_station_visited = static_cast<StationID>(v->current_order.GetDestination());
 		UpdateVehicleTimetable(v, true);
 		v->IncrementImplicitOrderIndex();
 	}

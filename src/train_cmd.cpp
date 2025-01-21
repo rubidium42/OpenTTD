@@ -3307,7 +3307,7 @@ bool TrainController(Train *v, Vehicle *nomove, bool reverse)
 					}
 					if (HasBit(r, VETS_ENTERED_STATION)) {
 						/* The new position is the end of the platform */
-						TrainEnterStation(v, r >> VETS_STATION_ID_OFFSET);
+						TrainEnterStation(v, static_cast<StationID>(r >> VETS_STATION_ID_OFFSET));
 					}
 				}
 			} else {
@@ -3501,7 +3501,7 @@ bool TrainController(Train *v, Vehicle *nomove, bool reverse)
 
 				if (HasBit(r, VETS_ENTERED_STATION)) {
 					/* The new position is the location where we want to stop */
-					TrainEnterStation(v, r >> VETS_STATION_ID_OFFSET);
+					TrainEnterStation(v, static_cast<StationID>(r >> VETS_STATION_ID_OFFSET));
 				}
 			}
 		} else {

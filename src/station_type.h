@@ -13,8 +13,17 @@
 #include "core/smallstack_type.hpp"
 #include "tilearea_type.h"
 
-typedef uint16_t StationID;
-typedef uint16_t RoadStopID;
+enum StationID : uint16_t {
+	STATION_BEGIN = 0,
+	STATION_END = 64000,
+	NEW_STATION = 0xFFFD,
+	ADJACENT_STATION = 0xFFFE,
+	INVALID_STATION = 0xFFFF
+};
+enum RoadStopID : uint16_t {
+	ROADSTOP_BEGIN = 0,
+	ROADSTOP_END = 64000,
+};
 
 struct BaseStation;
 struct Station;
@@ -22,11 +31,7 @@ struct RoadStop;
 struct StationSpec;
 struct Waypoint;
 
-static const StationID NEW_STATION = 0xFFFD;
-static const StationID ADJACENT_STATION = 0xFFFE;
-static const StationID INVALID_STATION = 0xFFFF;
-
-typedef SmallStack<StationID, StationID, INVALID_STATION, 8, 0xFFFD> StationIDStack;
+typedef SmallStack<StationID, std::underlying_type_t<StationID>, INVALID_STATION, 8, 0xFFFD> StationIDStack;
 
 /** Station types */
 enum class StationType : uint8_t {

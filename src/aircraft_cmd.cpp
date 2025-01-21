@@ -1447,7 +1447,7 @@ static void AircraftLandAirplane(Aircraft *v)
 void AircraftNextAirportPos_and_Order(Aircraft *v)
 {
 	if (v->current_order.IsType(OT_GOTO_STATION) || v->current_order.IsType(OT_GOTO_DEPOT)) {
-		v->targetairport = v->current_order.GetDestination();
+		v->targetairport = static_cast<StationID>(v->current_order.GetDestination());
 	}
 
 	const Station *st = GetTargetAirportIfValid(v);

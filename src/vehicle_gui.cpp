@@ -2264,7 +2264,7 @@ public:
 	void OnGameTick() override
 	{
 		if (this->vehgroups.NeedResort()) {
-			StationID station = (this->vli.type == VL_STATION_LIST) ? this->vli.index : INVALID_STATION;
+			StationID station = (this->vli.type == VL_STATION_LIST) ? static_cast<StationID>(this->vli.index) : INVALID_STATION;
 
 			Debug(misc, 3, "Periodic resort {} list company {} at station {}", this->vli.vtype, this->owner, station);
 			this->SetDirty();

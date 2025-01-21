@@ -35,7 +35,7 @@ static void UpdateWaypointOrder(Order *o)
 	const Station *st = Station::Get(o->GetDestination());
 	if ((st->had_vehicle_of_type & HVOT_WAYPOINT) == 0) return;
 
-	o->MakeGoToWaypoint(o->GetDestination());
+	o->MakeGoToWaypoint(static_cast<StationID>(o->GetDestination()));
 }
 
 /**
@@ -173,7 +173,6 @@ std::list<CargoPacket *> _packets;
 uint32_t _old_num_dests;
 
 struct FlowSaveLoad {
-	FlowSaveLoad() : source(0), via(0), share(0), restricted(false) {}
 	StationID source;
 	StationID via;
 	uint32_t share;
@@ -302,7 +301,7 @@ public:
 		for (const auto &outer_it : ge->GetData().flows) {
 			const FlowStat::SharesMap *shares = outer_it.second.GetShares();
 			uint32_t sum_shares = 0;
-			FlowSaveLoad flow;
+			FlowSaveLoad flow{};
 			flow.source = outer_it.first;
 			for (auto &inner_it : *shares) {
 				flow.via = inner_it.second;
@@ -321,7 +320,7 @@ public:
 		if (num_flows == 0) return;
 
 		GoodsEntry::GoodsEntryData &data = ge->GetOrCreateData();
-		FlowSaveLoad flow;
+		FlowSaveLoad flow{};
 		FlowStat *fs = nullptr;
 		StationID prev_source = INVALID_STATION;
 		for (uint32_t j = 0; j < num_flows; ++j) {
@@ -418,7 +417,7 @@ public:
 				AssignBit(ge.status, GoodsEntry::GES_ACCEPTANCE, HasBit(_waiting_acceptance, 15));
 				if (GB(_waiting_acceptance, 0, 12) != 0) {
 					/* In old versions, enroute_from used 0xFF as INVALID_STATION */
-					StationID source = (IsSavegameVersionBefore(SLV_7) && _cargo_source == 0xFF) ? INVALID_STATION : _cargo_source;
+					StationID source = (IsSavegameVersionBefore(SLV_7) && _cargo_source == 0xFF) ? INVALID_STATION : static_cast<StationID>(_cargo_source);
 
 					/* Make sure we can allocate the CargoPacket. This is safe
 					 * as there can only be ~64k stations and 32 cargoes in these
