@@ -254,6 +254,9 @@ static const uint ROAD_STOP_TRACKBIT_FACTOR = 2;
 static const uint LOCK_DEPOT_TILE_FACTOR = 2;
 
 struct CargoPayment;
-typedef uint32_t CargoPaymentID;
+enum CargoPaymentID : uint32_t {
+	CARGO_PAYMENT_BEGIN = 0,
+	CARGO_PAYMENT_END = 0xFF000,
+};
 
 #endif /* ECONOMY_TYPE_H */
