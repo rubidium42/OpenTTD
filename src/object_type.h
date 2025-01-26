@@ -25,11 +25,13 @@ static const ObjectType NUM_OBJECTS_PER_GRF = NUM_OBJECTS; ///< Number of suppor
 static const ObjectType INVALID_OBJECT_TYPE = 0xFFFF; ///< An invalid object
 
 /** Unique identifier for an object. */
-typedef uint32_t ObjectID;
+enum ObjectID : uint32_t {
+	OBJECT_BEGIN = 0,
+	OBJECT_END = 0xFF0000,
+	INVALID_OBJECT = 0xFFFFFFFF ///< An invalid object
+};
 
 struct Object;
 struct ObjectSpec;
-
-static const ObjectID INVALID_OBJECT = 0xFFFFFFFF; ///< An invalid object
 
 #endif /* OBJECT_TYPE_H */

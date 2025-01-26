@@ -47,7 +47,7 @@ inline bool IsObjectTypeTile(Tile t, ObjectType type)
 inline ObjectID GetObjectIndex(Tile t)
 {
 	assert(IsTileType(t, MP_OBJECT));
-	return t.m2() | t.m5() << 16;
+	return static_cast<ObjectID>(t.m2() | t.m5() << 16);
 }
 
 /**
