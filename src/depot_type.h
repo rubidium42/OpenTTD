@@ -10,10 +10,13 @@
 #ifndef DEPOT_TYPE_H
 #define DEPOT_TYPE_H
 
-typedef uint16_t DepotID; ///< Type for the unique identifier of depots.
+/* Type for the unique identifier of depots. */
+enum DepotID : uint16_t {
+	DEPOT_BEGIN = 0,
+	DEPOT_END = 64000,
+	INVALID_DEPOT = UINT16_MAX
+};
 struct Depot;
-
-static const DepotID INVALID_DEPOT = UINT16_MAX;
 
 static const uint MAX_LENGTH_DEPOT_NAME_CHARS = 32; ///< The maximum length of a depot name in characters including '\0'
 

@@ -1140,9 +1140,9 @@ struct DepotWindow : Window {
 	 * In the case of airports, this is the station ID.
 	 * @return Depot or station ID of this window.
 	 */
-	inline uint16_t GetDepotIndex() const
+	inline DepotID GetDepotIndex() const
 	{
-		return (this->type == VEH_AIRCRAFT) ? ::GetStationIndex(this->window_number) : ::GetDepotIndex(this->window_number);
+		return (this->type == VEH_AIRCRAFT) ? static_cast<DepotID>(::GetStationIndex(this->window_number)) : ::GetDepotIndex(this->window_number);
 	}
 };
 
