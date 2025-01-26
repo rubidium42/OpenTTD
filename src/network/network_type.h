@@ -53,7 +53,7 @@ enum ClientID : uint32_t {
 };
 
 /** Indices into the client tables */
-enum ClientIndex : uint8_t {
+enum ClientIndex : uint16_t {
 	CLIENT_BEGIN = 0,
 	INVALID_CLIENT = 0xFF
 };

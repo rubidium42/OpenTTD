@@ -17,7 +17,7 @@
 #include "../timer/timer_game_economy.h"
 
 /** Type for the pool with client information. */
-typedef Pool<NetworkClientInfo, ClientIndex, 8, MAX_CLIENT_SLOTS, PT_NCLIENT> NetworkClientInfoPool;
+typedef Pool<NetworkClientInfo, ClientIndex, 8, static_cast<ClientIndex>(MAX_CLIENT_SLOTS), PT_NCLIENT> NetworkClientInfoPool;
 extern NetworkClientInfoPool _networkclientinfo_pool;
 
 /** Container for all information known about a client. */
