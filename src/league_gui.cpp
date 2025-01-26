@@ -298,11 +298,11 @@ private:
 	}
 
 public:
-	ScriptLeagueWindow(WindowDesc &desc, LeagueTableID table) : Window(desc)
+	ScriptLeagueWindow(WindowDesc &desc, WindowNumber window_number) : Window(desc)
 	{
-		this->table = table;
+		this->table = static_cast<LeagueTableID>(window_number);
 		this->BuildTable();
-		this->InitNested(table);
+		this->InitNested(window_number);
 	}
 
 	void SetStringParameters(WidgetID widget) const override

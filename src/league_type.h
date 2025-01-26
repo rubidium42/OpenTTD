@@ -29,12 +29,20 @@ struct Link {
 	Link(): Link(LT_NONE, 0) {}
 };
 
-typedef uint8_t LeagueTableID; ///< ID of a league table
+/* ID of a league table */
+enum LeagueTableID : uint8_t {
+	LEAGUE_TABLE_BEGIN = 0,
+	LEAGUE_TABLE_END = 255,
+	INVALID_LEAGUE_TABLE = 0xFF ///< Invalid/unknown index of LeagueTable
+};
 struct LeagueTable;
-static const LeagueTableID INVALID_LEAGUE_TABLE = 0xFF; ///< Invalid/unknown index of LeagueTable
 
-typedef uint16_t LeagueTableElementID; ///< ID of a league table element
+/* ID of a league table element */
+enum LeagueTableElementID : uint16_t {
+	LEAGUE_TABLE_ELEMENT_BEGIN = 0,
+	LEAGUE_TABLE_ELEMENT_END = 64000,
+	INVALID_LEAGUE_TABLE_ELEMENT = 0xFFFF ///< Invalid/unknown index of LeagueTableElement
+};
 struct LeagueTableElement;
-static const LeagueTableElementID INVALID_LEAGUE_TABLE_ELEMENT = 0xFFFF; ///< Invalid/unknown index of LeagueTableElement
 
 #endif /* LEAGUE_TYPE_H */
