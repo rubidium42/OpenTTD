@@ -13,17 +13,22 @@
 #include "core/enum_type.hpp"
 
 typedef uint8_t VehicleOrderID;  ///< The index of an order within its current vehicle (not pool related)
-typedef uint32_t OrderID;
-typedef uint16_t OrderListID;
+enum OrderID : uint32_t {
+	ORDER_BEGIN = 0,
+	ORDER_END = 0xFF0000,
+	/** Invalid order (sentinel) */
+	INVALID_ORDER = 0xFFFFFF
+};
+enum OrderListID : uint16_t {
+	ORDER_LIST_BEGIN = 0,
+	ORDER_LIST_END = 64000,
+};
 typedef uint16_t DestinationID;
 
 /** Invalid vehicle order index (sentinel) */
 static const VehicleOrderID INVALID_VEH_ORDER_ID = 0xFF;
 /** Last valid VehicleOrderID. */
 static const VehicleOrderID MAX_VEH_ORDER_ID     = INVALID_VEH_ORDER_ID - 1;
-
-/** Invalid order (sentinel) */
-static const OrderID INVALID_ORDER = 0xFFFFFF;
 
 /**
  * Maximum number of orders in implicit-only lists before we start searching
