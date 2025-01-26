@@ -15,14 +15,17 @@
 #include "engine_type.h"
 #include "group_type.h"
 
-typedef uint16_t EngineRenewID;
+enum EngineRenewID : uint16_t {
+	ENGINE_RENEW_BEGIN = 0,
+	ENGINE_RENEW_END = 64000,
+};
 
 /**
  * Memory pool for engine renew elements. DO NOT USE outside of engine.c. Is
  * placed here so the only exception to this rule, the saveload code, can use
  * it.
  */
-typedef Pool<EngineRenew, EngineRenewID, 16, 64000> EngineRenewPool;
+typedef Pool<EngineRenew, EngineRenewID, 16, ENGINE_RENEW_END> EngineRenewPool;
 extern EngineRenewPool _enginerenew_pool;
 
 /**
