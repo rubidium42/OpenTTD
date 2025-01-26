@@ -76,10 +76,11 @@ private:
  * @tparam Tzero        Whether to zero the memory
  * @warning when Tcache is enabled *all* instances of this pool's item must be of the same size.
  */
-template <class Titem, typename Tindex, size_t Tgrowth_step, size_t Tmax_size, PoolType Tpool_type = PT_NORMAL, bool Tcache = false, bool Tzero = true>
+template <class Titem, typename Tindex, size_t Tgrowth_step, Tindex Tmax_size, PoolType Tpool_type = PT_NORMAL, bool Tcache = false, bool Tzero = true>
 struct Pool : PoolBase {
 	/* Ensure the highest possible index, i.e. Tmax_size -1, is within the bounds of Tindex. */
 	static_assert(Tmax_size - 1 <= MAX_UVALUE(Tindex));
+	static_assert(std::is_enum_v<Tindex>);
 
 	static constexpr size_t MAX_SIZE = Tmax_size; ///< Make template parameter accessible from outside
 

@@ -23,7 +23,7 @@
  * @param type The return type of the method.
  */
 #define DEFINE_POOL_METHOD(type) \
-	template <class Titem, typename Tindex, size_t Tgrowth_step, size_t Tmax_size, PoolType Tpool_type, bool Tcache, bool Tzero> \
+	template <class Titem, typename Tindex, size_t Tgrowth_step, Tindex Tmax_size, PoolType Tpool_type, bool Tcache, bool Tzero> \
 	type Pool<Titem, Tindex, Tgrowth_step, Tmax_size, Tpool_type, Tcache, Tzero>
 
 /**
@@ -52,10 +52,10 @@ DEFINE_POOL_METHOD(inline)::Pool(const char *name) :
 DEFINE_POOL_METHOD(inline void)::ResizeFor(size_t index)
 {
 	assert(index >= this->data.size());
-	assert(index < Tmax_size);
+	assert(index < static_cast<size_t>(Tmax_size));
 
 	size_t old_size = this->data.size();
-	size_t new_size = std::min(Tmax_size, Align(index + 1, Tgrowth_step));
+	size_t new_size = std::min(static_cast<size_t>(Tmax_size), Align(index + 1, Tgrowth_step));
 
 	this->data.resize(new_size);
 	this->used_bitmap.resize(Align(new_size, BITMAP_SIZE) / BITMAP_SIZE);
