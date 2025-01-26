@@ -10,11 +10,17 @@
 #ifndef LINKGRAPH_TYPE_H
 #define LINKGRAPH_TYPE_H
 
-typedef uint16_t LinkGraphID;
-static const LinkGraphID INVALID_LINK_GRAPH = UINT16_MAX;
+enum LinkGraphID : uint16_t {
+	LINK_GRAPH_BEGIN = 0,
+	LINK_GRAPH_END = 0xFFFF,
+	INVALID_LINK_GRAPH = UINT16_MAX
+};
 
-typedef uint16_t LinkGraphJobID;
-static const LinkGraphJobID INVALID_LINK_GRAPH_JOB = UINT16_MAX;
+enum LinkGraphJobID : uint16_t {
+	LINK_GRAPH_JOB_BEGIN = 0,
+	LINK_GRAPH_JOB_END = 0xFFFF,
+	INVALID_LINK_GRAPH_JOB = UINT16_MAX
+};
 
 typedef uint16_t NodeID;
 static const NodeID INVALID_NODE = UINT16_MAX;
