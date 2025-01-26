@@ -18,11 +18,14 @@
 #include "saveload/saveload.h"
 
 /** Unique identifier for an order backup. */
-typedef uint8_t OrderBackupID;
+enum OrderBackupID : uint8_t {
+	ORDER_BACKUP_BEGIN = 0,
+	ORDER_BACKUP_END = 0xFF,
+};
 struct OrderBackup;
 
 /** The pool type for order backups. */
-typedef Pool<OrderBackup, OrderBackupID, 1, 256> OrderBackupPool;
+typedef Pool<OrderBackup, OrderBackupID, 1, ORDER_BACKUP_END> OrderBackupPool;
 /** The pool with order backups. */
 extern OrderBackupPool _order_backup_pool;
 
