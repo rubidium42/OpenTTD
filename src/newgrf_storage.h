@@ -186,10 +186,13 @@ void AddChangedPersistentStorage(BasePersistentStorageArray *storage);
 
 typedef PersistentStorageArray<int32_t, 16> OldPersistentStorage;
 
-typedef uint32_t PersistentStorageID;
+enum PersistentStorageID : uint32_t {
+	PERSISTENT_STORAGE_BEGIN = 0,
+	PERSISTENT_STORAGE_END = 0xFF000,
+};
 
 struct PersistentStorage;
-typedef Pool<PersistentStorage, PersistentStorageID, 1, 0xFF000> PersistentStoragePool;
+typedef Pool<PersistentStorage, PersistentStorageID, 1, PERSISTENT_STORAGE_END> PersistentStoragePool;
 
 extern PersistentStoragePool _persistent_storage_pool;
 
