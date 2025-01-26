@@ -53,15 +53,19 @@ enum ClientID : uint32_t {
 };
 
 /** Indices into the client tables */
-typedef uint8_t ClientIndex;
+enum ClientIndex : uint8_t {
+	CLIENT_BEGIN = 0,
+	INVALID_CLIENT = 0xFF
+};
 
 /** Indices into the admin tables. */
-typedef uint8_t AdminIndex;
-
-/** Maximum number of allowed admins. */
-static const AdminIndex MAX_ADMINS = 16;
-/** An invalid admin marker. */
-static const AdminIndex INVALID_ADMIN_ID = UINT8_MAX;
+enum AdminIndex : uint8_t {
+	ADMIN_BEGIN = 0,
+	/** Maximum number of allowed admins. */
+	MAX_ADMINS = 16,
+	/** An invalid admin marker. */
+	INVALID_ADMIN_ID = UINT8_MAX
+};
 
 /** Simple calculated statistics of a company */
 struct NetworkCompanyStats {
