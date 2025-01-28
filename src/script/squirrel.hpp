@@ -152,6 +152,8 @@ public:
 	void InsertResult(bool result);
 	void InsertResult(int result);
 	void InsertResult(uint result) { this->InsertResult((int)result); }
+	template <typename T> requires std::is_base_of_v<StrongTypedefBase, T>
+	void InsertResult(T result) { this->InsertResult(static_cast<int>(result.base())); }
 
 	/**
 	 * Call a method of an instance, in various flavors.

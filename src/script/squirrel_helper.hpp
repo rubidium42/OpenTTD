@@ -52,6 +52,14 @@ namespace SQConvert {
 		}
 	};
 
+	template <typename T> requires std::is_base_of_v<StrongTypedefBase, T> struct Return<T> {
+		static inline int Set(HSQUIRRELVM vm, T res)
+		{
+			sq_pushinteger(vm, res.base());
+			return 1;
+		}
+	};
+
 	template <> struct Return<std::optional<std::string>> {
 		static inline int Set(HSQUIRRELVM vm, std::optional<std::string> res)
 		{
@@ -89,6 +97,15 @@ namespace SQConvert {
 			SQInteger tmp;
 			sq_getinteger(vm, index, &tmp);
 			return static_cast<T>(tmp);
+		}
+	};
+
+	template <typename T> requires std::is_base_of_v<StrongTypedefBase, T> struct Param<T> {
+		static inline T Get(HSQUIRRELVM vm, int index)
+		{
+			SQInteger tmp;
+			sq_getinteger(vm, index, &tmp);
+			return T{static_cast<T::BaseType>(tmp)};
 		}
 	};
 
