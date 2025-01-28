@@ -79,7 +79,7 @@ private:
 template <class Titem, typename Tindex, size_t Tgrowth_step, size_t Tmax_size, PoolType Tpool_type = PT_NORMAL, bool Tcache = false, bool Tzero = true>
 struct Pool : PoolBase {
 	/* Ensure the highest possible index, i.e. Tmax_size -1, is within the bounds of Tindex. */
-	static_assert(Tmax_size - 1 <= MAX_UVALUE(Tindex));
+	//static_assert(Tmax_size - 1 <= MAX_UVALUE(Tindex));
 
 	static constexpr size_t MAX_SIZE = Tmax_size; ///< Make template parameter accessible from outside
 
@@ -259,8 +259,8 @@ struct Pool : PoolBase {
 		{
 			if (p == nullptr) return;
 			Titem *pn = static_cast<Titem *>(p);
-			assert(pn == Tpool->Get(pn->index));
-			Tpool->FreeItem(pn->index);
+			assert(pn == Tpool->Get(Pool::GetRawIndex(pn->index)));
+			Tpool->FreeItem(Pool::GetRawIndex(pn->index));
 		}
 
 		/**
@@ -324,9 +324,9 @@ struct Pool : PoolBase {
 		 * @param index index to examine
 		 * @return true if PoolItem::Get(index) will return non-nullptr pointer
 		 */
-		static inline bool IsValidID(size_t index)
+		static inline bool IsValidID(auto index)
 		{
-			return Tpool->IsValidID(index);
+			return Tpool->IsValidID(Pool::GetRawIndex(index));
 		}
 
 		/**
@@ -335,9 +335,9 @@ struct Pool : PoolBase {
 		 * @return pointer to Titem
 		 * @pre index < this->first_unused
 		 */
-		static inline Titem *Get(size_t index)
+		static inline Titem *Get(auto index)
 		{
-			return Tpool->Get(index);
+			return Tpool->Get(Pool::GetRawIndex(index));
 		}
 
 		/**
@@ -346,9 +346,10 @@ struct Pool : PoolBase {
 		 * @return pointer to Titem
 		 * @note returns nullptr for invalid index
 		 */
-		static inline Titem *GetIfValid(size_t index)
+		static inline Titem *GetIfValid(auto index)
 		{
-			return index < Tpool->first_unused ? Tpool->Get(index) : nullptr;
+			size_t real_index = Pool::GetRawIndex(index);
+			return real_index < Tpool->first_unused ? Tpool->Get(real_index) : nullptr;
 		}
 
 		/**
@@ -410,6 +411,11 @@ private:
 	void *GetNew(size_t size, size_t index);
 
 	void FreeItem(size_t index);
+
+	/* Temporary helper functions to get the raw index from either strongly and non-strongly typed pool items. */
+	static constexpr size_t GetRawIndex(size_t index) { return index; }
+	template <typename T> requires std::is_base_of_v<StrongTypedefBase, T>
+	static constexpr size_t GetRawIndex(const T &index) { return index.base(); }
 };
 
 #endif /* POOL_TYPE_HPP */

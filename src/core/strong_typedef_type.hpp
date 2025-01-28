@@ -132,6 +132,17 @@ namespace StrongType {
 		};
 	};
 
+	/* Mixin for StrongType to provide Begin/End/Invalid constants useful for iteration and the likes. */
+	template <size_t TEnd, size_t TInvalid>
+	struct ID {
+		template <typename TType, typename TBaseType>
+		struct mixin {
+			static constexpr TType Begin{};
+			static constexpr TType End{static_cast<TBaseType>(TEnd)};
+			static constexpr TType Invalid{static_cast<TBaseType>(TInvalid)};
+		};
+	};
+
 	/**
 	 * Templated helper to make a type-safe 'typedef' representing a single POD value.
 	 * A normal 'typedef' is not distinct from its base type and will be treated as
