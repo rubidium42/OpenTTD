@@ -11,6 +11,7 @@
 #define FORMAT_HPP
 
 #include "../3rdparty/fmt/format.h"
+#include "pool_type.hpp"
 #include "strong_typedef_type.hpp"
 
 template <typename E, typename Char>
@@ -29,8 +30,8 @@ struct fmt::formatter<E, Char, std::enable_if_t<std::is_enum<E>::value>> : fmt::
 	}
 };
 
-template <typename T, typename Char>
-struct fmt::formatter<T, Char, std::enable_if_t<std::is_base_of<StrongTypedefBase, T>::value>> : fmt::formatter<typename T::BaseType> {
+template <typename T, typename Char> requires std::is_base_of_v<StrongTypedefBase, T> || std::is_base_of_v<PoolIDBase, T>
+struct fmt::formatter<T, Char> : fmt::formatter<typename T::BaseType> {
 	using underlying_type = typename T::BaseType;
 	using parent = typename fmt::formatter<underlying_type>;
 
