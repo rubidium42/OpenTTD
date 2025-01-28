@@ -14,7 +14,7 @@
 #include "goal_type.h"
 #include "core/pool_type.hpp"
 
-typedef Pool<Goal, GoalID, 64, 64000> GoalPool;
+typedef Pool<Goal, GoalID, 64, GoalID::End.base()> GoalPool;
 extern GoalPool _goal_pool;
 
 /** Struct about goals, current and completed */

@@ -77,12 +77,12 @@ INSTANTIATE_POOL_METHODS(Goal)
  */
 std::tuple<CommandCost, GoalID> CmdCreateGoal(DoCommandFlag flags, CompanyID company, GoalType type, GoalTypeID dest, const std::string &text)
 {
-	if (!Goal::CanAllocateItem()) return { CMD_ERROR, INVALID_GOAL };
+	if (!Goal::CanAllocateItem()) return { CMD_ERROR, GoalID::Invalid };
 
-	if (_current_company != OWNER_DEITY) return { CMD_ERROR, INVALID_GOAL };
-	if (text.empty()) return { CMD_ERROR, INVALID_GOAL };
-	if (company != INVALID_COMPANY && !Company::IsValidID(company)) return { CMD_ERROR, INVALID_GOAL };
-	if (!Goal::IsValidGoalDestination(company, type, dest)) return { CMD_ERROR, INVALID_GOAL };
+	if (_current_company != OWNER_DEITY) return { CMD_ERROR, GoalID::Invalid };
+	if (text.empty()) return { CMD_ERROR, GoalID::Invalid };
+	if (company != INVALID_COMPANY && !Company::IsValidID(company)) return { CMD_ERROR, GoalID::Invalid };
+	if (!Goal::IsValidGoalDestination(company, type, dest)) return { CMD_ERROR, GoalID::Invalid };
 
 	if (flags & DC_EXEC) {
 		Goal *g = new Goal();
@@ -102,7 +102,7 @@ std::tuple<CommandCost, GoalID> CmdCreateGoal(DoCommandFlag flags, CompanyID com
 		return { CommandCost(), g->index };
 	}
 
-	return { CommandCost(), INVALID_GOAL };
+	return { CommandCost(), GoalID::Invalid };
 }
 
 /**

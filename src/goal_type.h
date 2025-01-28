@@ -34,8 +34,9 @@ enum GoalType : uint8_t {
 
 typedef uint32_t GoalTypeID; ///< Contains either tile, industry ID, town ID, company ID, or story page ID
 
-typedef uint16_t GoalID; ///< ID of a goal
+/** ID of a goal */
+using GoalID = StrongType::Typedef<uint16_t, struct GoalIDTag, StrongType::Compare, StrongType::ID<64000, 0xFFFF>>;
+
 struct Goal;
-static const GoalID INVALID_GOAL = 0xFFFF; ///< Constant representing a non-existing goal.
 
 #endif /* GOAL_TYPE_H */
