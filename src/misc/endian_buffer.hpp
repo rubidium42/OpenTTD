@@ -50,12 +50,12 @@ public:
 		return *this;
 	}
 
-	template <class T, std::enable_if_t<std::disjunction_v<std::negation<std::is_class<T>>, std::is_base_of<StrongTypedefBase, T>>, int> = 0>
+	template <class T, std::enable_if_t<std::disjunction_v<std::negation<std::is_class<T>>, std::is_base_of<StrongTypedefBase, T>, std::is_base_of<PoolIDBase, T>>, int> = 0>
 	EndianBufferWriter &operator <<(const T data)
 	{
 		if constexpr (std::is_enum_v<T>) {
 			this->Write(to_underlying(data));
-		} else if constexpr (std::is_base_of_v<StrongTypedefBase, T>) {
+		} else if constexpr (std::is_base_of_v<StrongTypedefBase, T> || std::is_base_of_v<PoolIDBase, T>) {
 			this->Write(data.base());
 		} else {
 			this->Write(data);
@@ -147,12 +147,12 @@ public:
 		return *this;
 	}
 
-	template <class T, std::enable_if_t<std::disjunction_v<std::negation<std::is_class<T>>, std::is_base_of<StrongTypedefBase, T>>, int> = 0>
+	template <class T, std::enable_if_t<std::disjunction_v<std::negation<std::is_class<T>>, std::is_base_of<StrongTypedefBase, T>, std::is_base_of<PoolIDBase, T>>, int> = 0>
 	EndianBufferReader &operator >>(T &data)
 	{
 		if constexpr (std::is_enum_v<T>) {
 			data = static_cast<T>(this->Read<std::underlying_type_t<T>>());
-		} else if constexpr (std::is_base_of_v<StrongTypedefBase, T>) {
+		} else if constexpr (std::is_base_of_v<StrongTypedefBase, T> || std::is_base_of_v<PoolIDBase, T>) {
 			data = T{this->Read<typename T::BaseType>()};
 		} else {
 			data = this->Read<T>();

@@ -12,6 +12,7 @@
 
 #include "squirrel.hpp"
 #include "../core/alloc_func.hpp"
+#include "../core/pool_type.hpp"
 #include "../economy_type.h"
 #include "../string_func.h"
 #include "../tile_type.h"
@@ -48,6 +49,14 @@ namespace SQConvert {
 		static inline int Set(HSQUIRRELVM vm, T res)
 		{
 			sq_pushinteger(vm, to_underlying(res));
+			return 1;
+		}
+	};
+
+	template <typename T> requires std::is_base_of_v<PoolIDBase, T> struct Return<T> {
+		static inline int Set(HSQUIRRELVM vm, T res)
+		{
+			sq_pushinteger(vm, res.base());
 			return 1;
 		}
 	};
@@ -89,6 +98,15 @@ namespace SQConvert {
 			SQInteger tmp;
 			sq_getinteger(vm, index, &tmp);
 			return static_cast<T>(tmp);
+		}
+	};
+
+	template <typename T> requires std::is_base_of_v<PoolIDBase, T> struct Param<T> {
+		static inline T Get(HSQUIRRELVM vm, int index)
+		{
+			SQInteger tmp;
+			sq_getinteger(vm, index, &tmp);
+			return T{static_cast<T::BaseType>(tmp)};
 		}
 	};
 
