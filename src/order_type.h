@@ -11,10 +11,11 @@
 #define ORDER_TYPE_H
 
 #include "core/enum_type.hpp"
+#include "core/pool_type.hpp"
 
 typedef uint8_t VehicleOrderID;  ///< The index of an order within its current vehicle (not pool related)
-typedef uint32_t OrderID;
-typedef uint16_t OrderListID;
+using OrderID = PoolID<uint32_t, struct OrderIDTag, 0xFF0000, 0xFFFFFF>;
+using OrderListID = PoolID<uint16_t, struct OrderListIDTag, 64000, 0xFFFF>;
 typedef uint16_t DestinationID;
 
 /** Invalid vehicle order index (sentinel) */
@@ -23,7 +24,7 @@ static const VehicleOrderID INVALID_VEH_ORDER_ID = 0xFF;
 static const VehicleOrderID MAX_VEH_ORDER_ID     = INVALID_VEH_ORDER_ID - 1;
 
 /** Invalid order (sentinel) */
-static const OrderID INVALID_ORDER = 0xFFFFFF;
+static constexpr OrderID INVALID_ORDER = OrderID::Invalid();
 
 /**
  * Maximum number of orders in implicit-only lists before we start searching
