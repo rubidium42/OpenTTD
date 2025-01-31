@@ -273,7 +273,7 @@ std::tuple<CommandCost, StoryPageElementID> CmdCreateStoryPageElement(DoCommandF
 		pe->page = page_id;
 		UpdateElement(*pe, tile, reference, text);
 
-		InvalidateWindowClassesData(WC_STORY_BOOK, page_id);
+		InvalidateWindowClassesData(WC_STORY_BOOK, page_id.base());
 
 		_story_page_element_next_sort_value++;
 		return { CommandCost(), pe->index };
@@ -304,7 +304,7 @@ CommandCost CmdUpdateStoryPageElement(DoCommandFlag flags, TileIndex tile, Story
 
 	if (flags & DC_EXEC) {
 		UpdateElement(*pe, tile, reference, text);
-		InvalidateWindowClassesData(WC_STORY_BOOK, pe->page);
+		InvalidateWindowClassesData(WC_STORY_BOOK, pe->page.base());
 	}
 
 	return CommandCost();
@@ -326,7 +326,7 @@ CommandCost CmdSetStoryPageTitle(DoCommandFlag flags, StoryPageID page_id, const
 		StoryPage *p = StoryPage::Get(page_id);
 		p->title = text;
 
-		InvalidateWindowClassesData(WC_STORY_BOOK, page_id);
+		InvalidateWindowClassesData(WC_STORY_BOOK, page_id.base());
 	}
 
 	return CommandCost();
@@ -348,7 +348,7 @@ CommandCost CmdSetStoryPageDate(DoCommandFlag flags, StoryPageID page_id, TimerG
 		StoryPage *p = StoryPage::Get(page_id);
 		p->date = date;
 
-		InvalidateWindowClassesData(WC_STORY_BOOK, page_id);
+		InvalidateWindowClassesData(WC_STORY_BOOK, page_id.base());
 	}
 
 	return CommandCost();
@@ -419,7 +419,7 @@ CommandCost CmdRemoveStoryPageElement(DoCommandFlag flags, StoryPageElementID pa
 
 		delete pe;
 
-		InvalidateWindowClassesData(WC_STORY_BOOK, page_id);
+		InvalidateWindowClassesData(WC_STORY_BOOK, page_id.base());
 	}
 
 	return CommandCost();
