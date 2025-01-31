@@ -298,9 +298,8 @@ private:
 	}
 
 public:
-	ScriptLeagueWindow(WindowDesc &desc, LeagueTableID table) : Window(desc)
+	ScriptLeagueWindow(WindowDesc &desc, WindowNumber table) : Window(desc), table(table)
 	{
-		this->table = table;
 		this->BuildTable();
 		this->InitNested(table);
 	}
@@ -445,7 +444,7 @@ static WindowDesc _script_league_desc(
 void ShowScriptLeagueTable(LeagueTableID table)
 {
 	if (!LeagueTable::IsValidID(table)) return;
-	AllocateWindowDescFront<ScriptLeagueWindow>(_script_league_desc, table);
+	AllocateWindowDescFront<ScriptLeagueWindow>(_script_league_desc, table.base());
 }
 
 void ShowFirstLeagueTable()

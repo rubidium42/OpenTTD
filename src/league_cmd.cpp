@@ -99,7 +99,7 @@ std::tuple<CommandCost, LeagueTableElementID> CmdCreateLeagueTableElement(DoComm
 		lte->text = text;
 		lte->score = score;
 		lte->link = link;
-		InvalidateWindowData(WC_COMPANY_LEAGUE, table);
+		InvalidateWindowData(WC_COMPANY_LEAGUE, table.base());
 		return { CommandCost(), lte->index };
 	}
 	return { CommandCost(), INVALID_LEAGUE_TABLE_ELEMENT };
@@ -128,7 +128,7 @@ CommandCost CmdUpdateLeagueTableElementData(DoCommandFlag flags, LeagueTableElem
 		lte->company = company;
 		lte->text = text;
 		lte->link = link;
-		InvalidateWindowData(WC_COMPANY_LEAGUE, lte->table);
+		InvalidateWindowData(WC_COMPANY_LEAGUE, lte->table.base());
 	}
 	return CommandCost();
 }
@@ -150,7 +150,7 @@ CommandCost CmdUpdateLeagueTableElementScore(DoCommandFlag flags, LeagueTableEle
 	if (flags & DC_EXEC) {
 		lte->rating = rating;
 		lte->score = score;
-		InvalidateWindowData(WC_COMPANY_LEAGUE, lte->table);
+		InvalidateWindowData(WC_COMPANY_LEAGUE, lte->table.base());
 	}
 	return CommandCost();
 }
@@ -170,7 +170,7 @@ CommandCost CmdRemoveLeagueTableElement(DoCommandFlag flags, LeagueTableElementI
 	if (flags & DC_EXEC) {
 		auto table = lte->table;
 		delete lte;
-		InvalidateWindowData(WC_COMPANY_LEAGUE, table);
+		InvalidateWindowData(WC_COMPANY_LEAGUE, table.base());
 	}
 	return CommandCost();
 }
