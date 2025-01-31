@@ -1122,7 +1122,7 @@ static size_t ReferenceToInt(const void *obj, SLRefType rt)
 		case REF_ENGINE_RENEWS:  return ((const       EngineRenew*)obj)->index.base() + 1;
 		case REF_CARGO_PACKET:   return ((const       CargoPacket*)obj)->index.base() + 1;
 		case REF_ORDERLIST:      return ((const         OrderList*)obj)->index.base() + 1;
-		case REF_STORAGE:        return ((const PersistentStorage*)obj)->index + 1;
+		case REF_STORAGE:        return ((const PersistentStorage*)obj)->index.base() + 1;
 		case REF_LINK_GRAPH:     return ((const         LinkGraph*)obj)->index.base() + 1;
 		case REF_LINK_GRAPH_JOB: return ((const      LinkGraphJob*)obj)->index.base() + 1;
 		default: NOT_REACHED();
