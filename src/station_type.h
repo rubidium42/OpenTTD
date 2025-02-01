@@ -14,7 +14,7 @@
 #include "tilearea_type.h"
 
 typedef uint16_t StationID;
-typedef uint16_t RoadStopID;
+using RoadStopID = PoolID<uint16_t, struct RoadStopIDTag, 64000, 0xFFFF>;
 
 struct BaseStation;
 struct Station;
