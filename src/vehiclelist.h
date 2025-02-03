@@ -19,7 +19,7 @@
 enum VehicleListType : uint8_t {
 	VL_STANDARD,
 	VL_SHARED_ORDERS,
-	VL_STATION_LIST,
+	VL_STATION_LIST, // get conflicted
 	VL_DEPOT_LIST,
 	VL_GROUP_LIST,
 	VLT_END
