@@ -36,7 +36,7 @@ public:
 	EndianBufferWriter &operator <<(bool data) { return *this << static_cast<uint8_t>(data ? 1 : 0); }
 
 	template <typename T>
-	EndianBufferWriter &operator <<(const OverflowSafeInt<T> &data) { return *this << static_cast<T>(data); };
+	EndianBufferWriter &operator <<(const OverflowSafeInt<T> &data) { return *this << static_cast<T>(data); }; // woopsie
 
 	template <typename... Targs>
 	EndianBufferWriter &operator <<(const std::tuple<Targs...> &data)
