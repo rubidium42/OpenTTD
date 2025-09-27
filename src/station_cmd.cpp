@@ -1478,9 +1478,7 @@ CommandCost CmdBuildRailStation(DoCommandFlags flags, TileIndex tile_org, RailTy
 	TileIndexDiff track_delta = TileOffsByAxis(OtherAxis(axis)); // offset to go to the next track
 
 	RailStationTileLayout stl{statspec, numtracks, plat_len};
-	auto it = stl.begin();
-	TileIndex tile_track = tile_org;
-	for (uint i = 0; i != numtracks; ++i, tile_track += track_delta) {
+	for (auto [i, it, tile_track] = std::make_tuple(0, stl.begin(), tile_org); i != numtracks; ++i, tile_track += track_delta) {
 		TileIndex tile = tile_track;
 		for (uint j = 0; j != plat_len; ++j, tile += tile_delta, ++it) {
 			/* Don't check the layout if there's no bridge above anyway. */
@@ -1531,12 +1529,8 @@ CommandCost CmdBuildRailStation(DoCommandFlags flags, TileIndex tile_org, RailTy
 		}
 
 		Track track = AxisToTrack(axis);
-
-		auto it = stl.begin();
-
 		Company *c = Company::Get(st->owner);
-		TileIndex tile_track = tile_org;
-		for (uint i = 0; i != numtracks; ++i) {
+		for (auto [i, it, tile_track] = std::make_tuple(0, stl.begin(), tile_org); i != numtracks; ++i, tile_track += track_delta) {
 			TileIndex tile = tile_track;
 			for (uint j = 0; j != plat_len; ++j) {
 				if (IsRailStationTile(tile) && HasStationReservation(tile)) {
@@ -1588,8 +1582,6 @@ CommandCost CmdBuildRailStation(DoCommandFlags flags, TileIndex tile_org, RailTy
 
 				if (!IsStationTileBlocked(tile)) c->infrastructure.rail[rt]++;
 				c->infrastructure.station++;
-
-				tile += tile_delta;
 			}
 			AddTrackToSignalBuffer(tile_track, track, _current_company);
 			YapfNotifyTrackLayoutChange(tile_track, track);
