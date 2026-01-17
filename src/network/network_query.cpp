@@ -81,13 +81,13 @@ NetworkRecvStatus QueryNetworkGameSocketHandler::SendGameInfo()
 {
 	Debug(net, 9, "Query::SendGameInfo()");
 
-	this->SendPacket(std::make_unique<Packet>(this, PACKET_CLIENT_GAME_INFO));
+	this->SendPacket(std::make_unique<Packet>(this, PacketGameType::ClientGameInfo));
 	return NETWORK_RECV_STATUS_OKAY;
 }
 
-NetworkRecvStatus QueryNetworkGameSocketHandler::Receive_SERVER_FULL(Packet &)
+NetworkRecvStatus QueryNetworkGameSocketHandler::ReceiveServerFull(Packet &)
 {
-	Debug(net, 9, "Query::Receive_SERVER_FULL()");
+	Debug(net, 9, "Query::ReceiveServerFull()");
 
 	NetworkGame *item = NetworkGameListAddItem(this->connection_string);
 	item->status = NGLS_FULL;
@@ -98,9 +98,9 @@ NetworkRecvStatus QueryNetworkGameSocketHandler::Receive_SERVER_FULL(Packet &)
 	return NETWORK_RECV_STATUS_CLOSE_QUERY;
 }
 
-NetworkRecvStatus QueryNetworkGameSocketHandler::Receive_SERVER_BANNED(Packet &)
+NetworkRecvStatus QueryNetworkGameSocketHandler::ReceiveServerBanned(Packet &)
 {
-	Debug(net, 9, "Query::Receive_SERVER_BANNED()");
+	Debug(net, 9, "Query::ReceiveServerBanned()");
 
 	NetworkGame *item = NetworkGameListAddItem(this->connection_string);
 	item->status = NGLS_BANNED;
@@ -111,9 +111,9 @@ NetworkRecvStatus QueryNetworkGameSocketHandler::Receive_SERVER_BANNED(Packet &)
 	return NETWORK_RECV_STATUS_CLOSE_QUERY;
 }
 
-NetworkRecvStatus QueryNetworkGameSocketHandler::Receive_SERVER_GAME_INFO(Packet &p)
+NetworkRecvStatus QueryNetworkGameSocketHandler::ReceiveServerGameInfo(Packet &p)
 {
-	Debug(net, 9, "Query::Receive_SERVER_GAME_INFO()");
+	Debug(net, 9, "Query::ReceiveServerGameInfo()");
 
 	NetworkGame *item = NetworkGameListAddItem(this->connection_string);
 
@@ -132,11 +132,11 @@ NetworkRecvStatus QueryNetworkGameSocketHandler::Receive_SERVER_GAME_INFO(Packet
 	return NETWORK_RECV_STATUS_CLOSE_QUERY;
 }
 
-NetworkRecvStatus QueryNetworkGameSocketHandler::Receive_SERVER_ERROR(Packet &p)
+NetworkRecvStatus QueryNetworkGameSocketHandler::ReceiveServerError(Packet &p)
 {
 	NetworkErrorCode error = (NetworkErrorCode)p.Recv_uint8();
 
-	Debug(net, 9, "Query::Receive_SERVER_ERROR(): error={}", error);
+	Debug(net, 9, "Query::ReceiveServerError(): error={}", error);
 
 	NetworkGame *item = NetworkGameListAddItem(this->connection_string);
 

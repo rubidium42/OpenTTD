@@ -310,7 +310,7 @@ void ShowNetworkError(StringID error_string)
 StringID GetNetworkErrorMsg(NetworkErrorCode err)
 {
 	/* List of possible network errors, used by
-	 * PACKET_SERVER_ERROR and PACKET_CLIENT_ERROR */
+	 * PacketGameType::ServerError and PacketGameType::ClientError */
 	static const StringID network_error_strings[] = {
 		STR_NETWORK_ERROR_CLIENT_GENERAL,
 		STR_NETWORK_ERROR_CLIENT_DESYNC,
