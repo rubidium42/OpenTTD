@@ -94,6 +94,17 @@ public:
 		return this->consumer.ReadUntilChar('\0', StringConsumer::SKIP_ONE_SEPARATOR);
 	}
 
+	/**
+	 * Read a label.
+	 * @return The read label.
+	 */
+	template <typename T>
+	T ReadLabel()
+	{
+		uint8_t buf[4]{ this->ReadByte(), this->ReadByte(), this->ReadByte(), this->ReadByte() };
+		return buf;
+	}
+
 	size_t Remaining() const
 	{
 		return this->consumer.GetBytesLeft();
