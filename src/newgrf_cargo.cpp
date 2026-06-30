@@ -7,6 +7,7 @@
 
 /** @file newgrf_cargo.cpp Implementation of NewGRF cargoes. */
 
+#include "newgrf.h"
 #include "stdafx.h"
 #include "debug.h"
 #include "newgrf_cargo.h"
@@ -31,7 +32,7 @@ GrfSpecFeature CargoResolverObject::GetFeature() const
 
 uint32_t CargoResolverObject::GetDebugID() const
 {
-	return this->cargospec->label.base();
+	return FlattenNewGRFLabel(this->cargospec->label);
 }
 
 /**

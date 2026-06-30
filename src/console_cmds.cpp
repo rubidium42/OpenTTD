@@ -2799,13 +2799,14 @@ static bool ConFramerateWindow(std::span<std::string_view> argv)
  * @param label Label to format.
  * @return string representation of label.
  **/
-static std::string FormatLabel(uint32_t label)
+template <typename T>
+static std::string FormatLabel(Label<T> label)
 {
-	if (std::isgraph(GB(label, 24, 8)) && std::isgraph(GB(label, 16, 8)) && std::isgraph(GB(label, 8, 8)) && std::isgraph(GB(label, 0, 8))) {
-		return fmt::format("{:c}{:c}{:c}{:c}", GB(label, 24, 8), GB(label, 16, 8), GB(label, 8, 8), GB(label, 0, 8));
+	if (std::ranges::all_of(label, [](uint8_t c) { return std::isgraph(c); })) {
+		return std::string{label.AsStringView()};
 	}
 
-	return fmt::format("{:08X}", label);
+	return FormatArrayAsHex(label);
 }
 
 /** List all road types and their configuration. */
@@ -2821,7 +2822,7 @@ static void ConDumpRoadTypes()
 	std::map<uint32_t, const GRFFile *> grfs;
 	for (RoadType rt : EnumRange(ROADTYPE_END)) {
 		const RoadTypeInfo *rti = GetRoadTypeInfo(rt);
-		if (rti->label == 0) continue;
+		if (rti->label.Empty()) continue;
 		uint32_t grfid = 0;
 		const GRFFile *grf = rti->grffile[RoadSpriteType::Ground];
 		if (grf != nullptr) {
@@ -2860,7 +2861,7 @@ static void ConDumpRailTypes()
 	std::map<uint32_t, const GRFFile *> grfs;
 	for (RailType rt : EnumRange(RAILTYPE_END)) {
 		const RailTypeInfo *rti = GetRailTypeInfo(rt);
-		if (rti->label == 0) continue;
+		if (rti->label.Empty()) continue;
 		uint32_t grfid = 0;
 		const GRFFile *grf = rti->grffile[RailSpriteType::Ground];
 		if (grf != nullptr) {
@@ -2917,7 +2918,7 @@ static void ConDumpCargoTypes()
 		IConsolePrint(CC_DEFAULT, "  {:02d} Bit: {:2d}, Label: {}, Callback mask: 0x{:02X}, Cargo class: {}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}, GRF: {:08X}, {}",
 				spec->Index(),
 				spec->bitnum,
-				FormatLabel(spec->label.base()),
+				FormatLabel(spec->label),
 				spec->callback_mask.base(),
 				spec->classes.Test(CargoClass::Passengers)   ? 'p' : '-',
 				spec->classes.Test(CargoClass::Mail)         ? 'm' : '-',
