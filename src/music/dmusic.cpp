@@ -146,18 +146,22 @@ private:
 };
 
 /** A RIFF chunk header. */
-PACK_N(struct ChunkHeader {
+struct ChunkHeader {
 	FOURCC type;  ///< Chunk type.
 	DWORD length; ///< Length of the chunk, not including the chunk header itself.
-}, 2);
+};
+static_assert(sizeof(ChunkHeader) == 8);
 
+#pragma pack(push, 2)
 /** Buffer format for a DLS wave download. */
-PACK_N(struct WAVE_DOWNLOAD {
+struct WAVE_DOWNLOAD {
 	DMUS_DOWNLOADINFO   dlInfo;
 	ULONG               ulOffsetTable[2];
 	DMUS_WAVE           dmWave;
 	DMUS_WAVEDATA       dmWaveData;
-}, 2);
+};
+#pragma pack(pop)
+static_assert(sizeof(WAVE_DOWNLOAD) == 62);
 
 struct PlaybackSegment {
 	uint32_t start, end;

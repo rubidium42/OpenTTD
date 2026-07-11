@@ -537,12 +537,24 @@ int Win32StringContains(std::string_view str, std::string_view value, bool case_
 /* Based on code from MSDN: https://msdn.microsoft.com/en-us/library/xcb2z8hs.aspx */
 const DWORD MS_VC_EXCEPTION = 0x406D1388;
 
-PACK_N(struct THREADNAME_INFO {
+#pragma pack(push, 8)
+struct THREADNAME_INFO {
 	DWORD dwType;     ///< Must be 0x1000.
 	LPCSTR szName;    ///< Pointer to name (in user addr space).
 	DWORD dwThreadID; ///< Thread ID (-1=caller thread).
 	DWORD dwFlags;    ///< Reserved for future use, must be zero.
-}, 8);
+};
+#pragma pack(pop)
+static_assert(sizeof(THREADNAME_INFO) == 2 * sizeof(LPCSTR) + 2 * sizeof(DWORD));
+
+struct THREADNAME_INFO_NO_PACK {
+	DWORD dwType;     ///< Must be 0x1000.
+	LPCSTR szName;    ///< Pointer to name (in user addr space).
+	DWORD dwThreadID; ///< Thread ID (-1=caller thread).
+	DWORD dwFlags;    ///< Reserved for future use, must be zero.
+};
+static_assert(sizeof(THREADNAME_INFO) == sizeof(THREADNAME_INFO_NO_PACK));
+static_assert(offsetof(THREADNAME_INFO, szName) == offsetof(THREADNAME_INFO_NO_PACK, szName));
 
 /**
  * Signal thread name to any attached debuggers.
