@@ -152,8 +152,15 @@ struct ChunkHeader {
 };
 static_assert(sizeof(ChunkHeader) == 8);
 
-#pragma pack(push, 2)
+PACK_N(struct OLD_WAVE_DOWNLOAD {
+		DMUS_DOWNLOADINFO   dlInfo;
+		ULONG               ulOffsetTable[2];
+		DMUS_WAVE           dmWave;
+		DMUS_WAVEDATA       dmWaveData;
+}, 2);
+
 /** Buffer format for a DLS wave download. */
+#pragma pack(push, 2)
 struct WAVE_DOWNLOAD {
 	DMUS_DOWNLOADINFO   dlInfo;
 	ULONG               ulOffsetTable[2];
@@ -161,7 +168,14 @@ struct WAVE_DOWNLOAD {
 	DMUS_WAVEDATA       dmWaveData;
 };
 #pragma pack(pop)
-static_assert(sizeof(WAVE_DOWNLOAD) == 62);
+static_assert(sizeof(WAVE_DOWNLOAD) == sizeof(OLD_WAVE_DOWNLOAD));
+static_assert(sizeof(WAVE_DOWNLOAD) == sizeof(size_t) == 8 ? 62 : 64);
+static_assert(offsetof(WAVE_DOWNLOAD, dmWaveData) == offsetof(OLD_WAVE_DOWNLOAD, dmWaveData));
+
+template <int Size> struct DumpSize;
+template struct DumpSize<sizeof(WAVE_DOWNLOAD)>;
+template struct DumpSize<sizeof(OLD_WAVE_DOWNLOAD)>;
+template struct DumpSize<sizeof(size_t)>;
 
 struct PlaybackSegment {
 	uint32_t start, end;
